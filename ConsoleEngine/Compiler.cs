@@ -149,7 +149,7 @@ namespace ConsoleEngine
             {
                 project.scene.Render();
             }
-            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Black;
             Editor.CodeView();
             Editor.CodeWrite();
         }

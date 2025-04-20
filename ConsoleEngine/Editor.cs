@@ -254,7 +254,11 @@ namespace ConsoleEngine
         public static void CodeView()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("#Code");
+            Console.Write("#Code");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write(" - Для просмотра всех команд введите /help, для старта программы введите /start");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine();
             for (int codeI = 0; codeI < Engine.project.code.Count; codeI++)
             {
                 switch (Engine.project.code[codeI].Name)

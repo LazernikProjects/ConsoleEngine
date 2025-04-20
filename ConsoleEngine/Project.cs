@@ -75,7 +75,7 @@ namespace ConsoleEngine
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Help - все команды");
+            Console.WriteLine("Help - все команды (При написании кода напишите ТОЛЬКО НАЗВАНИЕ КОМАНДЫ, без аргументов, а аргументы напишите в соответствующем окне)");
             Console.WriteLine();
             Console.WriteLine("#Code");
 
@@ -97,9 +97,9 @@ namespace ConsoleEngine
             HelpCommand("fillWithPos", "(x, y)", "[colorFG, colorBG]", "Создает объект (fill) в указанных координатах с которым нельзя взаимодействовать");
             HelpCommand("clear", "", "", "Удаляет объект (fill) на месте obj");
             HelpCommand("wait", "", "", "Требует нажатия 'enter' после рендера сцены");
-            HelpCommand("texture", "", "[targer, texture]", "Изменяет текстуру у указанного объекта");
-            HelpCommand("colorFG", "", "[targer, color]", "Изменяет ForegroundColor у указанного объекта");
-            HelpCommand("colorBG", "", "[targer, color]", "Изменяет BackgroundColor у указанного объекта");
+            HelpCommand("texture", "", "[targer, texture]", "Изменяет текстуру у указанного объекта (obj, fill, field)");
+            HelpCommand("colorFG", "", "[targer, color]", "Изменяет ForegroundColor у указанного объекта (obj, fill, field)");
+            HelpCommand("colorBG", "", "[targer, color]", "Изменяет BackgroundColor у указанного объекта (obj, fill, field)");
             HelpCommand("changeRender", "", "[renderType]", "Изменяет тип рендера (default, wait, fast)");
             HelpCommand("sceneSize", "(x, y)", "", "Изменяет размер сцены");
             Console.WriteLine();
@@ -108,10 +108,10 @@ namespace ConsoleEngine
             HelpCommand2("/start", "Старт выполнения программы");
             HelpCommand2("/info", "Debug информация программы");
             HelpCommand2("/save", "Сохраняет проект в файл");
-            HelpCommand2("/p.render", "Изменяет тип рендера");
+            HelpCommand2("/p.render", "Изменяет тип рендера (default, wait, fast)");
             HelpCommand2("/p.sceneSize", "Изменяет размер сцены");
-            HelpCommand2("/p.texture", "Изменяет текстуру у указанного объекта");
-            HelpCommand2("/p.color", "Изменяет Color у указанного объекта");
+            HelpCommand2("/p.texture", "Изменяет текстуру у указанного объекта (obj, fill, field)");
+            HelpCommand2("/p.color", "Изменяет Color у указанного объекта (obj, fill, field)");
             Console.ReadLine();
             Engine.project.scene.Render();
             Compiler.Start(Engine.project);

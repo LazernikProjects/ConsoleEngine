@@ -12,7 +12,7 @@ namespace ConsoleEngine
     [Serializable]
     public class Engine
     {
-        public static string version = "1.0.0";
+        public static string version = "1.0.1";
         public static List<string> projects = new();
         public static Project project { get; set; } = null;
 
@@ -24,18 +24,20 @@ namespace ConsoleEngine
             Console.Write(" [Refactored] ");
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write($"- Version: {version}");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write($" - by LazernikProjects");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("- Loading...");
             try
             {
                 string jsonString = File.ReadAllText("C:\\ConsoleEngine\\data.txt");
-                Console.WriteLine("- read file data.txt...");
+                Console.WriteLine("- Read file data.txt...");
                 projects = JsonSerializer.Deserialize<List<string>>(jsonString);
             }
             catch(Exception ex)
             {
-                Error($"{ex}");
+                Console.WriteLine("- Файл проекта не найден");
             }
 
             Console.WriteLine("- Success!");
@@ -49,7 +51,7 @@ namespace ConsoleEngine
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Выберите проект - всего ({projects.Count}) [В разработке]");
+            Console.WriteLine($"Выберите проект - всего ({projects.Count})");
             for (int i = 0; i < projects.Count; i++)
             {
                 Console.ForegroundColor = ConsoleColor.White;
