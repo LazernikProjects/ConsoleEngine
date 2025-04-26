@@ -12,7 +12,8 @@ namespace ConsoleEngine
         {
             Fill.fill.Clear();
             bool wait = false;
-
+            project.scene.objX = 0;
+            project.scene.objY = 0;
             for (int codeI = 0; codeI < project.code.Count; codeI++)
             {
                 switch (project.code[codeI].Name)
@@ -123,13 +124,15 @@ namespace ConsoleEngine
                         project.scene.Y = project.code[codeI].IntArg2;
                         break;
                     default:
-                        codeI = 999;
-                        Engine.Error("Ошибка компилятора");
+                        Text.Error($"Неизвестная команда в строке: {codeI+1}");
+                        Console.ReadLine();
                         break;
                 }
+                Console.BackgroundColor = ConsoleColor.Black;
                 if (wait == true)
                 {
-                    Console.WriteLine("Нажмите 'Enter'");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine("- Нажмите 'Enter'");
                     Console.ReadLine();
                     wait = false;
                 }
@@ -140,7 +143,8 @@ namespace ConsoleEngine
                 }
                 if (project.scene.renderType == "wait")
                 {
-                    Console.WriteLine("Нажмите 'Enter'");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine("- Нажмите 'Enter'");
                     Console.ReadLine();
                     project.scene.Render();
                 }
@@ -149,7 +153,6 @@ namespace ConsoleEngine
             {
                 project.scene.Render();
             }
-            Console.BackgroundColor = ConsoleColor.Black;
             Editor.CodeView();
             Editor.CodeWrite();
         }

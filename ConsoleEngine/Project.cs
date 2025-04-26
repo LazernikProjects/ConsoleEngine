@@ -14,7 +14,7 @@ namespace ConsoleEngine
         public Scene scene { get; set; } = new Scene();
         public List<Code> code { get; set; } = new List<Code>();
 
-        public string name = "test"; 
+        public string name; 
         public void Save()
         {
             try
@@ -50,7 +50,7 @@ namespace ConsoleEngine
             }
             catch(Exception ex)
             {
-                Engine.Error($"{ex}");
+                Text.CriticalError($"{ex}");
             }
         }
 
@@ -62,9 +62,7 @@ namespace ConsoleEngine
             Console.WriteLine("read file project.txt...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Success!");
-            Console.ForegroundColor = ConsoleColor.White;
+            Text.Success("Проект загружен!");
             Console.ReadLine();
 
             project.scene.Render();
@@ -132,6 +130,14 @@ namespace ConsoleEngine
         public static void HelpCommand2(string name, string description) //Только для команд, не кода 
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(name);
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write($" - {description}");
+            Console.WriteLine();
+        }
+        public static void HelpCommand3(string name, string description) 
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(name);
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.Write($" - {description}");

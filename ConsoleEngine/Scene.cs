@@ -59,6 +59,7 @@ namespace ConsoleEngine
                 }
                 Console.WriteLine();
             }
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write($"Fill.Count: [{Fill.fill.Count}]");
             Console.Write(" - Render mode: ");
