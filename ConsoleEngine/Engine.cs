@@ -12,14 +12,14 @@ namespace ConsoleEngine
     [Serializable]
     public class Engine
     {
-        public static string version = "1.1.0";
+        public static string version = "1.2.0-beta1";
         public static string versionCEL = "2.0"; //Версия ConsoleEngineLanguage
-        public static string packagerVersion = "0.1 [Beta]";
-        public static string dotnet = ".NET 9.0";
+        public static string packagerVersion = "0.2 [Beta]";
+        public static string framework = ".NET 9.0";
 
+        public static string selectedProject = null;
         public static List<string> projects = new();
         public static Project project { get; set; } = null;
-
         public static void Loading()
         { 
             Console.ForegroundColor = ConsoleColor.White;
@@ -39,10 +39,8 @@ namespace ConsoleEngine
                 Console.WriteLine("- Read file data.txt...");
                 projects = JsonSerializer.Deserialize<List<string>>(jsonString);
             }
-            catch(Exception ex)
-            {
-                Console.WriteLine("- Файл проекта не найден");
-            }
+            catch
+            { Console.WriteLine("- Файл проекта не найден"); }
             Console.WriteLine("- Success!");
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine();
@@ -76,25 +74,33 @@ namespace ConsoleEngine
             }
             Console.WriteLine("Чтобы создать проект введите 'create', загрузить - 'load'");
 
-            switch (Console.ReadLine())
+            selectedProject = Console.ReadLine();
+            if (projects.Contains(selectedProject))
             {
-                case ("create" or "c"):
-                    ProjectCreate();
-                    break;
-                case ("load" or "l"):
-                    project = Project.Load();
-                    Compiler.Start(project);
-                    break;
-                default:
-                    Text.Error("Invalid value");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine("- Press 'Enter'");
-                    Console.ReadLine();
-                    ProjectSelect();
-                    break;
+                project = Project.LoadSelectProject();
+                Compiler.Start(project);
+            }
+            else
+            {
+                switch (selectedProject)
+                {
+                    case ("create" or "c"):
+                        ProjectCreate();
+                        break;
+                    case ("load" or "l"):
+                        project = Project.Load();
+                        Compiler.Start(project);
+                        break;
+                    default:
+                        Text.Error("Invalid value");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("- Press 'Enter'");
+                        Console.ReadLine();
+                        ProjectSelect();
+                        break;
+                }
             }
         }
-
         public static void ProjectCreate()
         {
             Console.Clear();

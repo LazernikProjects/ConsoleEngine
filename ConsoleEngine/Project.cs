@@ -68,7 +68,19 @@ namespace ConsoleEngine
             project.scene.Render();
             return project;
         }
+        public static Project LoadSelectProject()
+        {
+            string path = $"C:\\ConsoleEngine\\Projects\\{Engine.selectedProject}\\project.txt";
+            string jsonString = File.ReadAllText(path);
+            Console.WriteLine("read file project.txt...");
+            var project = JsonSerializer.Deserialize<Project>(jsonString);
 
+            Text.Success("Проект загружен!");
+            Console.ReadLine();
+
+            project.scene.Render();
+            return project;
+        }
         public static void Help()
         {
             Console.Clear();

@@ -42,7 +42,6 @@ namespace ConsoleEngine
                 "string fillTexture = \"()\";\r\nstring renderType = \"default\";" +
                 "void Render(){}";
             File.WriteAllText($"C:\\ConsoleEngine\\Projects\\packagerTest\\Program.cs", $"{Code}");
-
         }
     }
 }

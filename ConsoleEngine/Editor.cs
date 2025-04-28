@@ -21,19 +21,19 @@ namespace ConsoleEngine
             switch (writtenCode.ToLower())
             {
                 case ("pos" or "p"):
-                    Console.Write("\\X=");
+                    Console.Write("\\X = ");
                     intArg1 = int.Parse(Console.ReadLine());
-                    Console.Write("\\Y=");
+                    Console.Write("\\Y = ");
                     intArg2 = int.Parse(Console.ReadLine());
                     Engine.project.code.Add(new("pos", intArg1, intArg2, null, null));
                     break;
                 case ("movex" or "mx"):
-                    Console.Write("\\X=");
+                    Console.Write("\\X = ");
                     intArg1 = int.Parse(Console.ReadLine());
                     Engine.project.code.Add(new("moveX", intArg1, 0, null, null));
                     break;
                 case ("movey" or "my"):
-                    Console.Write("\\Y=");
+                    Console.Write("\\Y = ");
                     intArg1 = int.Parse(Console.ReadLine());
                     Engine.project.code.Add(new("moveY", intArg1, 0, null, null));
                     break;
@@ -48,22 +48,22 @@ namespace ConsoleEngine
                     Engine.project.code.Add(new("fill", 0, 0, strArg1, strArg2));
                     break;
                 case ("repeat" or "rp"):
-                    Console.Write("\\count=");
+                    Console.Write("\\Value = ");
                     intArg1 = int.Parse(Console.ReadLine());
                     Engine.project.code.Add(new("repeat", intArg1, 0, null, null));
                     repeatIndex = Engine.project.code.Count - 1;
 
-                    Console.Write("\\command=");
+                    Console.Write("\\Command = ");
                     repeatAnswer = Console.ReadLine();
                     switch (repeatAnswer)
                     {
                         case ("moveX" or "mx"):
-                            Console.Write("\\X=");
+                            Console.Write("\\X = ");
                             intArg1 = int.Parse(Console.ReadLine());
                             Engine.project.code.Add(new("moveX", intArg1, 0, null, null));
                             break;
                         case ("moveY" or "my"):
-                            Console.Write("\\Y=");
+                            Console.Write("\\Y = ");
                             intArg1 = int.Parse(Console.ReadLine());
                             Engine.project.code.Add(new("moveY", intArg1, 0, null, null));
                             break;
@@ -80,17 +80,17 @@ namespace ConsoleEngine
                     }
                     Engine.project.code[repeatIndex].StrArg1 = repeatAnswer;
 
-                    Console.Write("\\command=");
+                    Console.Write("\\Command = ");
                     repeatAnswer = Console.ReadLine();
                     switch (repeatAnswer)
                     {
                         case ("moveX" or "mx"):
-                            Console.Write("\\X=");
+                            Console.Write("\\X = ");
                             intArg1 = int.Parse(Console.ReadLine());
                             Engine.project.code.Add(new("moveX", intArg1, 0, null, null));
                             break;
                         case ("moveY" or "my"):
-                            Console.Write("\\Y=");
+                            Console.Write("\\Y = ");
                             intArg1 = int.Parse(Console.ReadLine());
                             Engine.project.code.Add(new("moveY", intArg1, 0, null, null));
                             break;
@@ -115,14 +115,14 @@ namespace ConsoleEngine
                     strArg1 = Console.ReadLine();
                     Console.Write("\\ColorBG = ");
                     strArg2 = Console.ReadLine();
-                    Console.Write("\\X=");
+                    Console.Write("\\X = ");
                     intArg1 = int.Parse(Console.ReadLine());
-                    Console.Write("\\Y=");
+                    Console.Write("\\Y = ");
                     intArg2 = int.Parse(Console.ReadLine());
                     Engine.project.code.Add(new("fillWithPos", intArg1, intArg2, strArg1, strArg2));
                     break;
                 case ("changerender" or "cr"):
-                    Console.Write("\\type=");
+                    Console.Write("\\Type = ");
                     switch (Console.ReadLine())
                     {
                         case ("default" or "d"):
@@ -163,9 +163,9 @@ namespace ConsoleEngine
                     Engine.project.code.Add(new("colorBG", 0, 0, strArg1, strArg2));
                     break;
                 case ("scenesize" or "ss"):
-                    Console.Write("\\X=");
+                    Console.Write("\\X = ");
                     intArg1 = int.Parse(Console.ReadLine());
-                    Console.Write("\\Y=");
+                    Console.Write("\\Y = ");
                     intArg2 = int.Parse(Console.ReadLine());
                     Engine.project.code.Add(new("sceneSize", intArg1, intArg2, null, null));
                     break;
@@ -187,7 +187,7 @@ namespace ConsoleEngine
                     Console.ReadLine();
                     break;
                 case ("/p.render"):
-                    Console.Write("\\type=");
+                    Console.Write("\\Type = ");
                     switch (Console.ReadLine())
                     {
                         case ("default" or "d"):
@@ -206,9 +206,9 @@ namespace ConsoleEngine
                     }
                     break;
                 case ("/p.scenesize"):
-                    Console.Write("\\X=");
+                    Console.Write("\\X = ");
                     Engine.project.scene.X = int.Parse(Console.ReadLine());
-                    Console.Write("\\Y=");
+                    Console.Write("\\Y = ");
                     Engine.project.scene.Y = int.Parse(Console.ReadLine());
                     break;
                 case ("/p.color"):
@@ -233,10 +233,18 @@ namespace ConsoleEngine
                         Engine.project.scene.fieldColorBG = strArg2;
                     }
                     else 
-                    { Text.Error("Выбран неверный объект"); }
+                    {
+                        Text.Error("Выбран неверный объект");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("- Press 'Enter'");
+                        Console.ReadLine();
+                    }
                         break;
                 case ("/p.texture"):
                     Text.Error("Команда недоступна");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine("- Press 'Enter'");
+                    Console.ReadLine();
                     break;
                 case ("/p.name"):
                     Console.Write("Новое имя проекта: ");
@@ -254,7 +262,7 @@ namespace ConsoleEngine
                     Console.WriteLine($"by LazernikProjects");
                     Console.WriteLine($"Engine version: {Engine.version}");
                     Console.WriteLine($"CEL version: {Engine.versionCEL}");
-                    Console.WriteLine($"Framework: {Engine.dotnet}");
+                    Console.WriteLine($"Framework: {Engine.framework}");
                     Console.WriteLine($"Engine folder: C:\\ConsoleEngine");
                     Console.WriteLine($"GitHub: https://github.com/LazernikProjects/ConsoleEngine");
                     Console.ForegroundColor = ConsoleColor.White;
@@ -373,15 +381,6 @@ namespace ConsoleEngine
             Console.Write($"{arg}");
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write($"{arg2}");
-            //Console.WriteLine();
-        }
-        public static void CodeEdit()
-        {
-
-        }
-        public static void CodeDelete()
-        {
-
         }
     }
 }
