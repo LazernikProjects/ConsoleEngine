@@ -12,8 +12,8 @@ namespace ConsoleEngine
     [Serializable]
     public class Engine
     {
-        public static string version = "1.2.0-beta1";
-        public static string versionCEL = "2.0"; //Версия ConsoleEngineLanguage
+        public static string version = "1.2.0-beta3";
+        public static string versionCEL = "3.0-beta2"; //Версия ConsoleEngineLanguage
         public static string packagerVersion = "0.2 [Beta]";
         public static string framework = ".NET 9.0";
 
@@ -42,10 +42,7 @@ namespace ConsoleEngine
             catch
             { Console.WriteLine("- Файл проекта не найден"); }
             Console.WriteLine("- Success!");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine();
-            Console.WriteLine("- Press 'Enter'");
-            Console.ReadLine();
+            Text.Enter();
             ProjectSelect();
         }
         public static void ProjectSelect()
@@ -93,9 +90,7 @@ namespace ConsoleEngine
                         break;
                     default:
                         Text.Error("Invalid value");
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        Console.WriteLine("- Press 'Enter'");
-                        Console.ReadLine();
+                        Text.Enter();
                         ProjectSelect();
                         break;
                 }
@@ -125,7 +120,7 @@ namespace ConsoleEngine
                 project.scene.Y = 5;
             }
             Text.Success("Проект создан!");
-            Console.ReadLine();
+            Text.Enter();
             project.scene.Render();
             Compiler.Start(project);
         }

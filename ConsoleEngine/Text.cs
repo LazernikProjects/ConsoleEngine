@@ -11,7 +11,10 @@ namespace ConsoleEngine
         public static void Success(string successText)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"- Успешно: {successText}");
+            if (successText == "" || successText == null)
+            { Console.WriteLine($"- Успешно!"); }
+            else
+            { Console.WriteLine($"- Успех: {successText}"); }
             Console.ForegroundColor = ConsoleColor.White;
         }
         public static void Warning(string warnText)
@@ -30,6 +33,13 @@ namespace ConsoleEngine
         {
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine($"{{!}} Критическая ошибка: {criticalErrorText}");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public static void Enter()
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("- Press 'Enter'");
+            Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.White;
         }
     }

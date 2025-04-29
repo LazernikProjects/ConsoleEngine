@@ -38,13 +38,13 @@ namespace ConsoleEngine
                 Engine.projects.Add(name);
                 string dataSave = JsonSerializer.Serialize(Engine.projects);
                 File.WriteAllText("C:\\ConsoleEngine\\data.txt", dataSave);
-                Console.WriteLine("write file project.txt...");
+                Console.WriteLine("- write file project.ceproj...");
                 string projectSave = JsonSerializer.Serialize(this);
-                File.WriteAllText($"C:\\ConsoleEngine\\Projects\\{name}\\project.txt", projectSave);
+                File.WriteAllText($"C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj", projectSave);
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Success!");
-                Console.WriteLine($"Путь к файлу проекта - C:\\ConsoleEngine\\Projects\\{name}\\project.txt");
+                Console.WriteLine($"Путь к файлу проекта - C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj");
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.ReadLine();
             }
@@ -56,10 +56,10 @@ namespace ConsoleEngine
 
         public static Project Load()
         {
-            Console.WriteLine("Укажите путь к файлу (project.txt)");
+            Console.WriteLine("Укажите путь к файлу (project.ceproj)");
             string path = Console.ReadLine();
             string jsonString = File.ReadAllText(path);
-            Console.WriteLine("read file project.txt...");
+            Console.WriteLine("read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
 
             Text.Success("Проект загружен!");
@@ -70,9 +70,9 @@ namespace ConsoleEngine
         }
         public static Project LoadSelectProject()
         {
-            string path = $"C:\\ConsoleEngine\\Projects\\{Engine.selectedProject}\\project.txt";
+            string path = $"C:\\ConsoleEngine\\Projects\\{Engine.selectedProject}\\project.ceproj";
             string jsonString = File.ReadAllText(path);
-            Console.WriteLine("read file project.txt...");
+            Console.WriteLine("read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
 
             Text.Success("Проект загружен!");

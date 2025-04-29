@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace ConsoleEngine
 {
     public class Editor
     {
+        public static string commandType = null; //для CodeV()
         public static void CodeWrite()
         {
             int intArg1 = 0;
@@ -25,32 +27,32 @@ namespace ConsoleEngine
                     intArg1 = int.Parse(Console.ReadLine());
                     Console.Write("\\Y = ");
                     intArg2 = int.Parse(Console.ReadLine());
-                    Engine.project.code.Add(new("pos", intArg1, intArg2, null, null));
+                    Engine.project.code.Add(new("pos", "engine", intArg1, intArg2, null, null));
                     break;
                 case ("movex" or "mx"):
                     Console.Write("\\X = ");
                     intArg1 = int.Parse(Console.ReadLine());
-                    Engine.project.code.Add(new("moveX", intArg1, 0, null, null));
+                    Engine.project.code.Add(new("moveX", "engine", intArg1, 0, null, null));
                     break;
                 case ("movey" or "my"):
                     Console.Write("\\Y = ");
                     intArg1 = int.Parse(Console.ReadLine());
-                    Engine.project.code.Add(new("moveY", intArg1, 0, null, null));
+                    Engine.project.code.Add(new("moveY", "engine", intArg1, 0, null, null));
                     break;
                 case ("filld" or "fd"):
-                    Engine.project.code.Add(new("fill", 0, 0, "black", "white"));
+                    Engine.project.code.Add(new("fill", "engine", 0, 0, "black", "white"));
                     break;
                 case ("fill" or "f"):
                     Console.Write("\\ColorFG = ");
                     strArg1 = Console.ReadLine();
                     Console.Write("\\ColorBG = ");
                     strArg2 = Console.ReadLine();
-                    Engine.project.code.Add(new("fill", 0, 0, strArg1, strArg2));
+                    Engine.project.code.Add(new("fill", "engine", 0, 0, strArg1, strArg2));
                     break;
                 case ("repeat" or "rp"):
                     Console.Write("\\Value = ");
                     intArg1 = int.Parse(Console.ReadLine());
-                    Engine.project.code.Add(new("repeat", intArg1, 0, null, null));
+                    Engine.project.code.Add(new("repeat", "engine", intArg1, 0, null, null));
                     repeatIndex = Engine.project.code.Count - 1;
 
                     Console.Write("\\Command = ");
@@ -60,22 +62,22 @@ namespace ConsoleEngine
                         case ("moveX" or "mx"):
                             Console.Write("\\X = ");
                             intArg1 = int.Parse(Console.ReadLine());
-                            Engine.project.code.Add(new("moveX", intArg1, 0, null, null));
+                            Engine.project.code.Add(new("moveX", "engine", intArg1, 0, null, null));
                             break;
                         case ("moveY" or "my"):
                             Console.Write("\\Y = ");
                             intArg1 = int.Parse(Console.ReadLine());
-                            Engine.project.code.Add(new("moveY", intArg1, 0, null, null));
+                            Engine.project.code.Add(new("moveY", "engine", intArg1, 0, null, null));
                             break;
                         case ("fillD" or "fd"):
-                            Engine.project.code.Add(new("fill", 0, 0, "black", "white"));
+                            Engine.project.code.Add(new("fill", "engine", 0, 0, "black", "white"));
                             break;
                         case ("fill" or "f"):
                             Console.Write("\\ColorFG = ");
                             strArg1 = Console.ReadLine();
                             Console.Write("\\ColorBG = ");
                             strArg2 = Console.ReadLine();
-                            Engine.project.code.Add(new("fill", 0, 0, strArg1, strArg2));
+                            Engine.project.code.Add(new("fill", "engine", 0, 0, strArg1, strArg2));
                             break;
                     }
                     Engine.project.code[repeatIndex].StrArg1 = repeatAnswer;
@@ -87,28 +89,28 @@ namespace ConsoleEngine
                         case ("moveX" or "mx"):
                             Console.Write("\\X = ");
                             intArg1 = int.Parse(Console.ReadLine());
-                            Engine.project.code.Add(new("moveX", intArg1, 0, null, null));
+                            Engine.project.code.Add(new("moveX", "engine", intArg1, 0, null, null));
                             break;
                         case ("moveY" or "my"):
                             Console.Write("\\Y = ");
                             intArg1 = int.Parse(Console.ReadLine());
-                            Engine.project.code.Add(new("moveY", intArg1, 0, null, null));
+                            Engine.project.code.Add(new("moveY", "engine", intArg1, 0, null, null));
                             break;
                         case ("fillD" or "fd"):
-                            Engine.project.code.Add(new("fill", 0, 0, "black", "white"));
+                            Engine.project.code.Add(new("fill", "engine", 0, 0, "black", "white"));
                             break;
                         case ("fill" or "f"):
                             Console.Write("\\ColorFG = ");
                             strArg1 = Console.ReadLine();
                             Console.Write("\\ColorBG = ");
                             strArg2 = Console.ReadLine();
-                            Engine.project.code.Add(new("fill", 0, 0, strArg1, strArg2));
+                            Engine.project.code.Add(new("fill", "engine", 0, 0, strArg1, strArg2));
                             break;
                     }
                     Engine.project.code[repeatIndex].StrArg2 = repeatAnswer;
                     break;
                 case ("clear" or "c"):
-                    Engine.project.code.Add(new("clear", 0, 0, null, null));
+                    Engine.project.code.Add(new("clear", "engine", 0, 0, null, null));
                     break;
                 case ("fillwithpos" or "fwp"):
                     Console.Write("\\ColorFG = ");
@@ -119,7 +121,7 @@ namespace ConsoleEngine
                     intArg1 = int.Parse(Console.ReadLine());
                     Console.Write("\\Y = ");
                     intArg2 = int.Parse(Console.ReadLine());
-                    Engine.project.code.Add(new("fillWithPos", intArg1, intArg2, strArg1, strArg2));
+                    Engine.project.code.Add(new("fillWithPos", "engine", intArg1, intArg2, strArg1, strArg2));
                     break;
                 case ("changerender" or "cr"):
                     Console.Write("\\Type = ");
@@ -139,38 +141,38 @@ namespace ConsoleEngine
                             Text.Error("Неверное значение (Установлено значение 'default')");
                             break;
                     }
-                    Engine.project.code.Add(new("changeRender", 0, 0, strArg1, null));
+                    Engine.project.code.Add(new("changeRender", "engine", 0, 0, strArg1, null));
                     break;
                 case ("texture" or "t"):
                     Console.Write("\\Target = ");
                     strArg1 = Console.ReadLine();
                     Console.Write("\\Texture = ");
                     strArg2 = Console.ReadLine();
-                    Engine.project.code.Add(new("texture", 0, 0, strArg1, strArg2));
+                    Engine.project.code.Add(new("texture", "engine", 0, 0, strArg1, strArg2));
                     break;
                 case ("colorfg" or "cfg"):
                     Console.Write("\\Target = ");
                     strArg1 = Console.ReadLine();
                     Console.Write("\\Color (FG) = ");
                     strArg2 = Console.ReadLine();
-                    Engine.project.code.Add(new("colorFG", 0, 0, strArg1, strArg2));
+                    Engine.project.code.Add(new("colorFG", "engine", 0, 0, strArg1, strArg2));
                     break;
                 case ("colorbg" or "cbg"):
                     Console.Write("\\Target = ");
                     strArg1 = Console.ReadLine();
                     Console.Write("\\Color (BG) = ");
                     strArg2 = Console.ReadLine();
-                    Engine.project.code.Add(new("colorBG", 0, 0, strArg1, strArg2));
+                    Engine.project.code.Add(new("colorBG", "engine", 0, 0, strArg1, strArg2));
                     break;
                 case ("scenesize" or "ss"):
                     Console.Write("\\X = ");
                     intArg1 = int.Parse(Console.ReadLine());
                     Console.Write("\\Y = ");
                     intArg2 = int.Parse(Console.ReadLine());
-                    Engine.project.code.Add(new("sceneSize", intArg1, intArg2, null, null));
+                    Engine.project.code.Add(new("sceneSize", "engine", intArg1, intArg2, null, null));
                     break;
                 case ("wait" or "w"):
-                    Engine.project.code.Add(new("wait", 0, 0, null, null));
+                    Engine.project.code.Add(new("wait", "engine", 0, 0, null, null));
                     break;
                 case ("/start" or "start" or "/s"):
                     Compiler.Start(Engine.project);
@@ -279,12 +281,11 @@ namespace ConsoleEngine
                     strArg1 = Console.ReadLine();
                     Console.Write("\\StrArg2 = ");
                     strArg2 = Console.ReadLine();
-                    Engine.project.code.Add(new(repeatAnswer, intArg1, intArg2, strArg1, strArg2));
+                    Engine.project.code.Add(new(repeatAnswer, "custom", intArg1, intArg2, strArg1, strArg2));
                     break;
                 case ("-edit" or "edit" or "-e"):
                     Console.Write("\\Line number = ");
-                    intArg1 = int.Parse(Console.ReadLine());
-                    intArg1--;
+                    intArg1 = int.Parse(Console.ReadLine()); intArg1--;
                     Console.Write("\\IntArg1 = ");
                     Engine.project.code[intArg1].IntArg1 = int.Parse(Console.ReadLine());
                     Console.Write("\\IntArg2 = ");
@@ -299,6 +300,51 @@ namespace ConsoleEngine
                     intArg1 = int.Parse(Console.ReadLine());
                     Engine.project.code.RemoveAt(intArg1 - 1);
                     break;
+                case ("-beta"):
+                    Console.Write("\\Command [beta] = ");
+                    strArg1 = Console.ReadLine();
+                    if (strArg1 == "/package") 
+                    {
+                        Packager.Package();
+                    }
+                    if (strArg1 == "nRepeat")
+                    {
+                        Console.Write("\\Value = ");
+                        intArg1 = int.Parse(Console.ReadLine());
+                        int repeatCommandsCount = 0;
+                        Engine.project.code.Add(new("nRepeat", "beta", intArg1, 0, null, null));
+                        int g = Engine.project.code.Count - 1;
+                        Console.WriteLine("Если вы написали все команды в этом цикле то напишите 'exit'");
+                        for (bool e = false; e == false;)
+                        {
+                            Console.Write("\\Name = ");
+                            repeatAnswer = Console.ReadLine();
+                            if (repeatAnswer == "exit")
+                            { e = true; repeatCommandsCount--; }
+                            if (repeatAnswer != "exit")
+                            { 
+                            Console.Write("\\IntArg1 = ");
+                            intArg1 = int.Parse(Console.ReadLine());
+                            Console.Write("\\IntArg2 = ");
+                            intArg2 = int.Parse(Console.ReadLine());
+                            Console.Write("\\StrArg1 = ");
+                            strArg1 = Console.ReadLine();
+                            Console.Write("\\StrArg2 = ");
+                            strArg2 = Console.ReadLine();
+                            Engine.project.code.Add(new(repeatAnswer, "engine-repeat", intArg1, intArg2, strArg1, strArg2)); 
+                            }
+                            repeatCommandsCount += 1;
+                        }
+                        Engine.project.code[g].IntArg2 = repeatCommandsCount;
+                    }
+                    else
+                    {
+                        Text.Error("Неверная команда");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("- Press 'Enter'");
+                        Console.ReadLine();
+                    }
+                        break;
                 default:
                     CodeWrite();
                     break;
@@ -317,56 +363,64 @@ namespace ConsoleEngine
             Console.WriteLine();
             for (int codeI = 0; codeI < Engine.project.code.Count; codeI++)
             {
+                commandType = Engine.project.code[codeI].Type;
+                int intArg1 = Engine.project.code[codeI].IntArg1;
+                int intArg2 = Engine.project.code[codeI].IntArg2;
+                string strArg1 = Engine.project.code[codeI].StrArg1;
+                string strArg2 = Engine.project.code[codeI].StrArg2;
                 switch (Engine.project.code[codeI].Name)
                 {
                     case ("pos"):
-                        CodeV("pos", $"({Engine.project.code[codeI].IntArg1}, {Engine.project.code[codeI].IntArg2})", "");
+                        CodeV("pos", $"({intArg1}, {intArg2})", "");
                         break;
                     case ("moveX"):
-                        CodeV("moveX", $"({Engine.project.code[codeI].IntArg1})", "");
+                        CodeV("moveX", $"({intArg1})", "");
                         break;
                     case ("moveY"):
-                        CodeV("moveY", $"({Engine.project.code[codeI].IntArg1})", "");
+                        CodeV("moveY", $"({intArg1})", "");
                         break;
                     case ("fill"):
-                        CodeV("fill", "", $"[{Engine.project.code[codeI].StrArg1}, {Engine.project.code[codeI].StrArg2}]");
+                        CodeV("fill", "", $"[{strArg1}, {strArg2}]");
                         break;
                     case ("repeat"):
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write($"repeat({Engine.project.code[codeI].IntArg1})");
+                        Console.Write($"repeat({intArg1})");
                         Console.WriteLine();
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        Console.Write($" \\{Engine.project.code[codeI].StrArg1}");
+                        Console.Write($" \\{strArg1}");
                         Console.WriteLine();
-                        Console.Write($" \\{Engine.project.code[codeI].StrArg2}");
+                        Console.Write($" \\{strArg2}");
                         codeI += 2;
                         break;
                     case ("fillWithPos"):
-                        CodeV("fillWithPos", $"({Engine.project.code[codeI].IntArg1}, {Engine.project.code[codeI].IntArg2})", $"[{Engine.project.code[codeI].StrArg1}, {Engine.project.code[codeI].StrArg2}]");
+                        CodeV("fillWithPos", $"({intArg1}, {intArg2})", $"[{strArg1}, {strArg2}]");
                         break;
                     case ("wait"):
                         CodeV("wait", "", "");
                         break;
                     case ("texture"):
-                        CodeV("texture", "", $"[{Engine.project.code[codeI].StrArg1}, {Engine.project.code[codeI].StrArg2}]");
+                        CodeV("texture", "", $"[{strArg1}, {strArg2}]");
                         break;
                     case ("colorBG"):
-                        CodeV("colorBG", "", $"[{Engine.project.code[codeI].StrArg1}, {Engine.project.code[codeI].StrArg2}]");
+                        CodeV("colorBG", "", $"[{strArg1}, {strArg2}]");
                         break;
                     case ("colorFG"):
-                        CodeV("colorFG", "", $"[{Engine.project.code[codeI].StrArg1}, {Engine.project.code[codeI].StrArg2}]");
+                        CodeV("colorFG", "", $"[{strArg1}, {strArg2}]");
                         break;
                     case ("clear"):
                         CodeV("clear", "", "");
                         break;
                     case ("sceneSize"):
-                        CodeV("sceneSize", $"({Engine.project.code[codeI].IntArg1}, {Engine.project.code[codeI].IntArg2})", "");
+                        CodeV("sceneSize", $"({intArg1}, {intArg2})", "");
                         break;
                     case ("changeRender"):
-                        CodeV("changeRender", "", $"[{Engine.project.code[codeI].StrArg1}]");
+                        CodeV("changeRender", "", $"[{strArg1}]");
+                        break;
+                    case ("nRepeat"):
+                        CodeV("nRepeat", $"({intArg1})", "");
                         break;
                     default:
-                        CodeV($"{Engine.project.code[codeI].Name}", $"({Engine.project.code[codeI].IntArg1}, {Engine.project.code[codeI].IntArg2})", $"[{Engine.project.code[codeI].StrArg1}, {Engine.project.code[codeI].StrArg2}]");
+                        CodeV($"{Engine.project.code[codeI].Name}", $"({intArg1}, {intArg2})", $"[{strArg1}, {strArg2}]");
                         break;
                 }
                 Console.ForegroundColor = ConsoleColor.White;
@@ -375,12 +429,59 @@ namespace ConsoleEngine
         }
         public static void CodeV(string name, string arg, string arg2)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(name);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"{arg}");
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write($"{arg2}");
+            if (commandType == "engine")
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(name);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{arg}");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"{arg2}");
+            }
+            else if (commandType == "engine-repeat")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write($" \\{name}");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write($"{arg}");
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write($"{arg2}");
+            }
+            else if (commandType == "custom")
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(name);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{arg}");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"{arg2}");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.Write(" - custom");
+            }
+            else if (commandType == "beta")
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(name);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{arg}");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"{arg2}");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.Write(" - beta");
+            }
+            else
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(name);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{arg}");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"{arg2}");
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write(" - unknown command");
+                Console.BackgroundColor = ConsoleColor.Black;
+            }
         }
     }
 }

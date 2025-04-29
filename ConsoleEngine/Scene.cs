@@ -71,6 +71,9 @@ namespace ConsoleEngine
                 Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(renderType);
             Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($" - Code line: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(Compiler.codeI);
             Console.WriteLine();
         }
 
