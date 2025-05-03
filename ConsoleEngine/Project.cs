@@ -24,31 +24,28 @@ namespace ConsoleEngine
                 Console.WriteLine("Сохранение проекта...");
                 if (Directory.Exists($"C:\\ConsoleEngine\\Projects\\{name}") == true)
                 {
-                    Console.WriteLine("Папка проекта обнаружена");
+                    Console.WriteLine("- Папка проекта обнаружена");
                 }
                 else
                 {
-                    Console.WriteLine("Папка проекта не найдена");
-                    Console.WriteLine("Создание папки...");
+                    Console.WriteLine("- Папка проекта не найдена");
+                    Console.WriteLine("- Создание папки...");
                     Directory.CreateDirectory($"C:\\ConsoleEngine\\Projects\\{name}");
                 }
-                Console.WriteLine();
-
-                Console.WriteLine("write file data.txt...");
-                Engine.projects.Add(name);
+                Console.WriteLine("- write file data.txt...");
                 if (Engine.projects.Contains(name))
                 { Console.WriteLine("- data.txt уже содержит этот проект"); }
                 else
-                { 
+                {
+                    Engine.projects.Add(name);
                     string dataSave = JsonSerializer.Serialize(Engine.projects);
                     File.WriteAllText("C:\\ConsoleEngine\\data.txt", dataSave);
                 }
                 Console.WriteLine("- write file project.ceproj...");
                 string projectSave = JsonSerializer.Serialize(this);
-                File.WriteAllText($"C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj", projectSave);
-
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Success!");
+                File.WriteAllText($"C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj", projectSave); 
+                Text.Success("Проект сохранен!");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine($"Путь к файлу проекта - C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj");
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.ReadLine();
@@ -60,9 +57,15 @@ namespace ConsoleEngine
         }
         public static Project Load()
         {
-            Console.WriteLine("Укажите путь к файлу (project.ceproj)");
-            string path = Console.ReadLine();
-            string jsonString = File.ReadAllText(path);
+            string jsonString = null;
+            try
+            {
+                Console.WriteLine("Укажите путь к файлу (project.ceproj)");
+                string path = Console.ReadLine();
+                jsonString = File.ReadAllText(path);
+            }
+            catch(Exception ex)
+            { Text.CriticalError($"{ex}"); }
             Console.WriteLine("read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
             Text.Success("Проект загружен!");
@@ -71,8 +74,14 @@ namespace ConsoleEngine
         }
         public static Project LoadSelectProject()
         {
-            string path = $"C:\\ConsoleEngine\\Projects\\{Engine.selectedProject}\\project.ceproj";
-            string jsonString = File.ReadAllText(path);
+            string jsonString = null;
+            try
+            {
+                string path = $"C:\\ConsoleEngine\\Projects\\{Engine.selectedProject}\\project.ceproj";
+                jsonString = File.ReadAllText(path);
+            }
+            catch (Exception ex)
+            { Text.CriticalError($"{ex}"); }
             Console.WriteLine("read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
             Text.Success("Проект загружен!");
@@ -81,48 +90,76 @@ namespace ConsoleEngine
         }
         public static void Help()
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("- Документация по CEL и движку");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("- Для просмотра введите следующие команды:");
+            HelpCommand2("/help1", "Все возможности CEL (Код)");
+            HelpCommand2("/help2", "Все команды");
+            HelpCommand2("/help3", "Функции движка");
+            Text.Enter();
+            //Engine.project.scene.Render();
+            //Compiler.Start(Engine.project);
+        }
+        public static void HelpCode()
+        {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Help - все команды (При написании кода напишите ТОЛЬКО НАЗВАНИЕ КОМАНДЫ, без аргументов, а аргументы напишите в соответствующем окне)");
             Console.WriteLine();
             Console.WriteLine("#Code");
-
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("repeat");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("(value)");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write($" - Цикл, повторяет две команды указанное кол-во раз");
+            HelpCommand("repeat", "(value)", "", "Цикл, повторяет две команды указанное кол-во раз");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine();
             Console.WriteLine(" \\command1");
             Console.WriteLine(" \\command2");
-            HelpCommand("pos", "(x, y)", "", "Перемещает Obj в указанную позицию");
+            HelpCommand("nRepeat", "(value)", "", "Более современный цикл, повторяет любые команды неограниченное кол-во раз");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(" \\command1");
+            Console.WriteLine(" \\command2");
+            HelpCommand("pos", "(x, y)", "", "Перемещает obj в указанную позицию");
+            HelpCommand("move", "(x, y)", "", "Изменяет позицию obj на указанное значение {X}&{Y}");
             HelpCommand("moveX", "(x)", "", "Изменяет {X} позицию obj на указанное значение");
             HelpCommand("moveY", "(y)", "", "Изменяет {Y} позицию obj на указанное значение");
             HelpCommand("fill", "", "[colorFG, colorBG]", "Создает объект (fill) на месте obj с которым нельзя взаимодействовать");
             HelpCommand("fillD", "", "", "Создает 'default' объект (fill) на месте obj с которым нельзя взаимодействовать");
             HelpCommand("fillWithPos", "(x, y)", "[colorFG, colorBG]", "Создает объект (fill) в указанных координатах с которым нельзя взаимодействовать");
+            HelpCommand("fillWithPosD", "(x, y)", "", "Создает 'default' объект (fill) в указанных координатах с предустановленным цветом");
             HelpCommand("clear", "", "", "Удаляет объект (fill) на месте obj");
             HelpCommand("wait", "", "", "Требует нажатия 'enter' после рендера сцены");
+            HelpCommand("text", "", "[text]", "Выводит текст");
             HelpCommand("texture", "", "[targer, texture]", "Изменяет текстуру у указанного объекта (obj, fill, field)");
             HelpCommand("colorFG", "", "[targer, color]", "Изменяет ForegroundColor у указанного объекта (obj, fill, field)");
             HelpCommand("colorBG", "", "[targer, color]", "Изменяет BackgroundColor у указанного объекта (obj, fill, field)");
             HelpCommand("changeRender", "", "[renderType]", "Изменяет тип рендера (default, wait, fast)");
             HelpCommand("sceneSize", "(x, y)", "", "Изменяет размер сцены");
-            Console.WriteLine();
+            Text.Enter();
+        }
+        public static void HelpAllCommands()
+        {
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("#Commands");
             HelpCommand2("/start", "Старт выполнения программы");
             HelpCommand2("/info", "Debug информация программы");
             HelpCommand2("/save", "Сохраняет проект в файл");
-            HelpCommand2("/p.render", "Изменяет тип рендера (default, wait, fast)");
-            HelpCommand2("/p.sceneSize", "Изменяет размер сцены");
-            HelpCommand2("/p.texture", "Изменяет текстуру у указанного объекта (obj, fill, field)");
-            HelpCommand2("/p.color", "Изменяет Color у указанного объекта (obj, fill, field)");
-            Console.ReadLine();
-            Engine.project.scene.Render();
-            Compiler.Start(Engine.project);
+            HelpCommand2("/render", "Изменяет тип рендера (default, wait, fast)");
+            HelpCommand2("/sceneSize", "Изменяет размер сцены");
+            HelpCommand2("/texture", "Изменяет текстуру у указанного объекта (obj, fill, field)");
+            HelpCommand2("/color", "Изменяет цвет у указанного объекта (obj, fill, field)");
+            HelpCommand2("/name", "Изменяет имя проекта");
+            HelpCommand2("/engine", "Выводит информацию о движке");
+            Text.Enter();
+        }
+        public static void HelpEngineFunctions()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("#EngineFunctions");
+            HelpCommand3("-edit", "Позволяет изменять код");
+            HelpCommand3("-delete", "Позволяет удалять код");
+            HelpCommand3("-custom", "Позволяет создавать кастомные команды");
+            HelpCommand3("-beta", "Позволяет использовать beta-команды");
+            Text.Enter();
         }
         public static void HelpCommand(string name, string arg, string arg2, string description) //HelpCommand("", "", "", ""); 
         {

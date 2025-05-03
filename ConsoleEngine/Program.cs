@@ -1,6 +1,6 @@
 ﻿using ConsoleEngine;
 using System.Reflection.PortableExecutable;
-
+Console.Title = "ConsoleEngine";
 Engine.Loading();
 /*Console.WriteLine("CEL 3.0* - Новые команды!");
 Project.HelpCommand("text","","[text]", "Выводит текст");
@@ -10,7 +10,7 @@ Project.HelpCommand3("-beta", "Позволяет использовать beta-
 Console.WriteLine();
 Console.ForegroundColor = ConsoleColor.Gray;
 Console.WriteLine("Beta-команды");
-Project.HelpCommand("nRepeat", "(value)", "", "Новый мощный цикл, который может принимать бесконечность команд (недоработан ввод команд)");
+Project.HelpCommand("nRepeat", "(value)", "", "Новый мощный цикл, который может принимать бесконечность команд");
 Project.HelpCommand2("/package", "Запускает Packager (НЕ СДЕЛАНО! НЕ ИСПОЛЬЗУЙТЕ ЭТО)");
 Console.ForegroundColor = ConsoleColor.White;
 Console.WriteLine("*ConsoleEngineLanguage");

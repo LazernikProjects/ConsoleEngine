@@ -39,6 +39,13 @@ namespace ConsoleEngine
                     intArg1 = int.Parse(Console.ReadLine());
                     Engine.project.code.Add(new("moveY", "engine", intArg1, 0, null, null));
                     break;
+                case ("move" or "m"):
+                    Console.Write("\\X = ");
+                    intArg1 = int.Parse(Console.ReadLine());
+                    Console.Write("\\Y = ");
+                    intArg2 = int.Parse(Console.ReadLine());
+                    Engine.project.code.Add(new("move", "engine", intArg1, intArg2, null, null));
+                    break;
                 case ("filld" or "fd"):
                     Engine.project.code.Add(new("fill", "engine", 0, 0, "black", "white"));
                     break;
@@ -169,6 +176,123 @@ namespace ConsoleEngine
                     Console.Write("\\Text = "); strArg1 = Console.ReadLine();
                     Engine.project.code.Add(new("text", "engine", 0, 0, strArg1, null));
                     break;
+                case ("nrepeat" or "nr"):
+                    Console.Write("\\Value = ");
+                    intArg1 = int.Parse(Console.ReadLine());
+                    int repeatCommandsCount = 0;
+                    Engine.project.code.Add(new("nRepeat", "engine", intArg1, 0, null, null));
+                    int g = Engine.project.code.Count - 1;
+                    Console.WriteLine("Для завершения цикла напишите 'exit'");
+                    for (bool e = false; e == false;)
+                    {
+                        Console.Write("\\Command = ");
+                        repeatAnswer = Console.ReadLine();
+                        if (repeatAnswer == "exit")
+                        { e = true; repeatCommandsCount--; }
+                        else
+                        {
+                            switch (repeatAnswer.ToLower())
+                            {
+                                case ("pos" or "p"):
+                                    Console.Write("\\X = ");
+                                    intArg1 = int.Parse(Console.ReadLine());
+                                    Console.Write("\\Y = ");
+                                    intArg2 = int.Parse(Console.ReadLine());
+                                    Engine.project.code.Add(new("pos", "engine-repeat", intArg1, intArg2, null, null));
+                                    break;
+                                case ("movex" or "mx"):
+                                    Console.Write("\\X = ");
+                                    intArg1 = int.Parse(Console.ReadLine());
+                                    Engine.project.code.Add(new("moveX", "engine-repeat", intArg1, 0, null, null));
+                                    break;
+                                case ("movey" or "my"):
+                                    Console.Write("\\Y = ");
+                                    intArg1 = int.Parse(Console.ReadLine());
+                                    Engine.project.code.Add(new("moveY", "engine-repeat", intArg1, 0, null, null));
+                                    break;
+                                case ("move" or "m"):
+                                    Console.Write("\\X = ");
+                                    intArg1 = int.Parse(Console.ReadLine());
+                                    Console.Write("\\Y = ");
+                                    intArg2 = int.Parse(Console.ReadLine());
+                                    Engine.project.code.Add(new("move", "engine-repeat", intArg1, intArg2, null, null));
+                                    break;
+                                case ("filld" or "fd"):
+                                    Engine.project.code.Add(new("fill", "engine-repeat", 0, 0, "black", "white"));
+                                    break;
+                                case ("fill" or "f"):
+                                    Console.Write("\\ColorFG = "); strArg1 = Console.ReadLine();
+                                    Console.Write("\\ColorBG = "); strArg2 = Console.ReadLine();
+                                    Engine.project.code.Add(new("fill", "engine-repeat", 0, 0, strArg1, strArg2));
+                                    break;
+                                case ("clear" or "c"):
+                                    Engine.project.code.Add(new("clear", "engine-repeat", 0, 0, null, null));
+                                    break;
+                                case ("fillwithpos" or "fwp"):
+                                    Console.Write("\\X = "); intArg1 = int.Parse(Console.ReadLine());
+                                    Console.Write("\\Y = "); intArg2 = int.Parse(Console.ReadLine());
+                                    Console.Write("\\ColorFG = "); strArg1 = Console.ReadLine();
+                                    Console.Write("\\ColorBG = "); strArg2 = Console.ReadLine();
+                                    Engine.project.code.Add(new("fillWithPos", "engine-repeat", intArg1, intArg2, strArg1, strArg2));
+                                    break;
+                                case ("fillwithposd" or "fwpd"):
+                                    Console.Write("\\X = "); intArg1 = int.Parse(Console.ReadLine());
+                                    Console.Write("\\Y = "); intArg2 = int.Parse(Console.ReadLine());
+                                    Engine.project.code.Add(new("fillWithPos", "engine-repeat", intArg1, intArg2, "black", "white"));
+                                    break;
+                                case ("changerender" or "cr"):
+                                    Console.Write("\\Type = ");
+                                    switch (Console.ReadLine())
+                                    {
+                                        case ("default" or "d"):
+                                            strArg1 = "default";
+                                            break;
+                                        case ("wait" or "w"):
+                                            strArg1 = "wait";
+                                            break;
+                                        case ("fast" or "f"):
+                                            strArg1 = "fast";
+                                            break;
+                                        default:
+                                            strArg1 = "default";
+                                            Text.Error("Неверное значение (Установлено значение 'default')");
+                                            break;
+                                    }
+                                    Engine.project.code.Add(new("changeRender", "engine-repeat", 0, 0, strArg1, null));
+                                    break;
+                                case ("texture" or "t"):
+                                    Console.Write("\\Target = "); strArg1 = Console.ReadLine();
+                                    Console.Write("\\Texture = "); strArg2 = Console.ReadLine();
+                                    Engine.project.code.Add(new("texture", "engine-repeat", 0, 0, strArg1, strArg2));
+                                    break;
+                                case ("colorfg" or "cfg"):
+                                    Console.Write("\\Target = "); strArg1 = Console.ReadLine();
+                                    Console.Write("\\Color (FG) = "); strArg2 = Console.ReadLine();
+                                    Engine.project.code.Add(new("colorFG", "engine-repeat", 0, 0, strArg1, strArg2));
+                                    break;
+                                case ("colorbg" or "cbg"):
+                                    Console.Write("\\Target = "); strArg1 = Console.ReadLine();
+                                    Console.Write("\\Color (BG) = "); strArg2 = Console.ReadLine();
+                                    Engine.project.code.Add(new("colorBG", "engine-repeat", 0, 0, strArg1, strArg2));
+                                    break;
+                                case ("scenesize" or "ss"):
+                                    Console.Write("\\X = "); intArg1 = int.Parse(Console.ReadLine());
+                                    Console.Write("\\Y = "); intArg2 = int.Parse(Console.ReadLine());
+                                    Engine.project.code.Add(new("sceneSize", "engine-repeat", intArg1, intArg2, null, null));
+                                    break;
+                                case ("wait" or "w"):
+                                    Engine.project.code.Add(new("wait", "engine-repeat", 0, 0, null, null));
+                                    break;
+                                case ("text" or "tx"):
+                                    Console.Write("\\Text = "); strArg1 = Console.ReadLine();
+                                    Engine.project.code.Add(new("text", "engine-repeat", 0, 0, strArg1, null));
+                                    break;
+                            }
+                        }
+                        repeatCommandsCount += 1;
+                    }
+                    Engine.project.code[g].IntArg2 = repeatCommandsCount;
+                    break;
                 case ("/start" or "start" or "/s"):
                     Compiler.Start(Engine.project);
                     break;
@@ -247,6 +371,15 @@ namespace ConsoleEngine
                 case ("/help" or "/h"):
                     Project.Help();
                     break;
+                case ("/help1" or "/h1" or "/helpCode"):
+                    Project.HelpCode();
+                    break;
+                case ("/help2" or "/h2" or "/helpCommands"):
+                    Project.HelpAllCommands();
+                    break;
+                case ("/help3" or "/h3" or "/helpEngineFunctions"):
+                    Project.HelpEngineFunctions();
+                    break;
                 case ("/engine"):
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine("- ConsoleEngine:");
@@ -284,36 +417,6 @@ namespace ConsoleEngine
                     if (strArg1 == "/package") 
                     {
                         Packager.Package();
-                    }
-                    if (strArg1 == "nRepeat")
-                    {
-                        Console.Write("\\Value = ");
-                        intArg1 = int.Parse(Console.ReadLine());
-                        int repeatCommandsCount = 0;
-                        Engine.project.code.Add(new("nRepeat", "beta", intArg1, 0, null, null));
-                        int g = Engine.project.code.Count - 1;
-                        Console.WriteLine("Если вы написали все команды в этом цикле то напишите 'exit'");
-                        for (bool e = false; e == false;)
-                        {
-                            Console.Write("\\Name = ");
-                            repeatAnswer = Console.ReadLine();
-                            if (repeatAnswer == "exit")
-                            { e = true; repeatCommandsCount--; }
-                            else
-                            {
-                                Console.Write("\\IntArg1 = ");
-                                intArg1 = int.Parse(Console.ReadLine());
-                                Console.Write("\\IntArg2 = ");
-                                intArg2 = int.Parse(Console.ReadLine());
-                                Console.Write("\\StrArg1 = ");
-                                strArg1 = Console.ReadLine();
-                                Console.Write("\\StrArg2 = ");
-                                strArg2 = Console.ReadLine();
-                                Engine.project.code.Add(new(repeatAnswer, "engine-repeat", intArg1, intArg2, strArg1, strArg2));
-                            }
-                            repeatCommandsCount += 1;
-                        }
-                        Engine.project.code[g].IntArg2 = repeatCommandsCount;
                     }
                     else
                     {

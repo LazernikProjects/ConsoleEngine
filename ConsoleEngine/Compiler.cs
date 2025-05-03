@@ -92,6 +92,10 @@ namespace ConsoleEngine
                     case ("moveY"):
                         project.scene.objY += project.code[codeI].IntArg1;
                         break;
+                    case ("move"):
+                        project.scene.objX += project.code[codeI].IntArg1;
+                        project.scene.objY += project.code[codeI].IntArg2;
+                        break;
                     case ("fill"):
                         Fill.fill.Add(new(project.scene.objX, project.scene.objY, project.code[codeI].StrArg1, project.code[codeI].StrArg2));
                         render = false;

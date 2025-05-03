@@ -64,6 +64,7 @@ namespace ConsoleEngine
                         Console.Write(fieldTexture);
                     }
                 }
+                Console.BackgroundColor = ConsoleColor.Black;
                 Console.WriteLine();
             }
             try
@@ -72,7 +73,6 @@ namespace ConsoleEngine
                 {
                     if (Engine.project.code.Count > 0)
                     {
-                        Console.BackgroundColor = ConsoleColor.Black;
                         Console.ForegroundColor = ConsoleColor.Gray;
                         Console.Write($"Fill.Count: [{Fill.fill.Count}]");
                         Console.Write(" - Render mode: ");

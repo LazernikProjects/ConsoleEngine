@@ -12,10 +12,10 @@ namespace ConsoleEngine
     [Serializable]
     public class Engine
     {
-        public static string version = "1.2.0-beta4";
-        public static string versionCEL = "3.0-beta3"; //Версия ConsoleEngineLanguage
+        public static string version = "1.2.0";
+        public static string versionCEL = "3.0"; //Версия ConsoleEngineLanguage
         public static string packagerVersion = "0.2 [Beta]";
-        public static string framework = ".NET 9.0";
+        public static string framework = "self-contained";
 
         public static string selectedProject = null;
         public static List<string> projects = new();
