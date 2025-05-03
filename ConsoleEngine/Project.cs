@@ -19,7 +19,7 @@ namespace ConsoleEngine
         {
             try
             {
-                //Engine.projects.Clear();
+                scene.ProjectSaveName = name;
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Сохранение проекта...");
                 if (Directory.Exists($"C:\\ConsoleEngine\\Projects\\{name}") == true)
@@ -36,8 +36,13 @@ namespace ConsoleEngine
 
                 Console.WriteLine("write file data.txt...");
                 Engine.projects.Add(name);
-                string dataSave = JsonSerializer.Serialize(Engine.projects);
-                File.WriteAllText("C:\\ConsoleEngine\\data.txt", dataSave);
+                if (Engine.projects.Contains(name))
+                { Console.WriteLine("- data.txt уже содержит этот проект"); }
+                else
+                { 
+                    string dataSave = JsonSerializer.Serialize(Engine.projects);
+                    File.WriteAllText("C:\\ConsoleEngine\\data.txt", dataSave);
+                }
                 Console.WriteLine("- write file project.ceproj...");
                 string projectSave = JsonSerializer.Serialize(this);
                 File.WriteAllText($"C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj", projectSave);
@@ -53,7 +58,6 @@ namespace ConsoleEngine
                 Text.CriticalError($"{ex}");
             }
         }
-
         public static Project Load()
         {
             Console.WriteLine("Укажите путь к файлу (project.ceproj)");
@@ -61,11 +65,8 @@ namespace ConsoleEngine
             string jsonString = File.ReadAllText(path);
             Console.WriteLine("read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
-
             Text.Success("Проект загружен!");
             Console.ReadLine();
-
-            project.scene.Render();
             return project;
         }
         public static Project LoadSelectProject()
@@ -74,11 +75,8 @@ namespace ConsoleEngine
             string jsonString = File.ReadAllText(path);
             Console.WriteLine("read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
-
             Text.Success("Проект загружен!");
             Console.ReadLine();
-
-            project.scene.Render();
             return project;
         }
         public static void Help()
@@ -126,7 +124,6 @@ namespace ConsoleEngine
             Engine.project.scene.Render();
             Compiler.Start(Engine.project);
         }
-
         public static void HelpCommand(string name, string arg, string arg2, string description) //HelpCommand("", "", "", ""); 
         {
             Console.ForegroundColor = ConsoleColor.Yellow;

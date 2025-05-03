@@ -9,14 +9,18 @@ namespace ConsoleEngine
 {
     public class Compiler
     {
+        public static bool compilerStarted = false;
         public static int codeI = 0;
+        public static string text = null;
         public static void Start(Project project)
         {
+            compilerStarted = true;
             Fill.fill.Clear();
             bool render = true;
             bool wait = false;
             project.scene.objX = 0;
             project.scene.objY = 0;
+            text = null;
             for (codeI = 0; codeI < project.code.Count; codeI++)
             {
                 render = true;
@@ -133,6 +137,9 @@ namespace ConsoleEngine
                         project.scene.X = project.code[codeI].IntArg1;
                         project.scene.Y = project.code[codeI].IntArg2;
                         break;
+                    case ("text"):
+                        text = project.code[codeI].StrArg1;
+                        break;
                     case ("nRepeat"):
                         repeatI = codeI;
                         int firstCommand = codeI + 1;
@@ -196,6 +203,9 @@ namespace ConsoleEngine
                                         project.scene.X = project.code[firstCommand + nRepeatC].IntArg1;
                                         project.scene.Y = project.code[firstCommand + nRepeatC].IntArg2;
                                         break;
+                                    case ("text"):
+                                        text = project.code[codeI].StrArg1;
+                                        break;
                                     default:
                                         Text.Error($"Неизвестная команда в цикле nRepeat"); Text.Enter();
                                         break;
@@ -225,6 +235,27 @@ namespace ConsoleEngine
             }
             if (project.scene.renderType == "fast")
             { project.scene.Render(); }
+
+            if (project.scene.renderType != "wait")
+            {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write($"Fill.Count: [{Fill.fill.Count}]");
+                Console.Write(" - Render mode: ");
+                if (project.scene.renderType == "default")
+                    Console.ForegroundColor = ConsoleColor.White;
+                if (project.scene.renderType == "wait")
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                if (project.scene.renderType == "fast")
+                    Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(project.scene.renderType);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($" - Code line: ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(codeI);
+                Console.WriteLine();
+            }
+            compilerStarted = false;
             Editor.CodeView();
             Editor.CodeWrite();
         }

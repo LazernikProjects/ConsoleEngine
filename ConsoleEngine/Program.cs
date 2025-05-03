@@ -2,12 +2,16 @@
 using System.Reflection.PortableExecutable;
 
 Engine.Loading();
-/*Console.WriteLine("CEL 2.0* - Новые команды!");
-Project.HelpCommand2("/engine", "Показывает информацию о движке");
-Project.HelpCommand2("/p.name", "Изменяет имя проекта");
-Project.HelpCommand3("-edit", "Позволяет редактировать код");
-Project.HelpCommand3("-delete", "Позволяет удалять код");
-Project.HelpCommand3("-custom", "Позволяет добавить кастомную команду");
+/*Console.WriteLine("CEL 3.0* - Новые команды!");
+Project.HelpCommand("text","","[text]", "Выводит текст");
+Project.HelpCommand("fillWithPosD", "(x, y)", "", "Создает 'default' объект (fill) в указанных координатах с предустановленным цветом");
+Project.HelpCommand2("/p.texture", "Изменяет текстуру у указанного объекта");
+Project.HelpCommand3("-beta", "Позволяет использовать beta-команды");
+Console.WriteLine();
+Console.ForegroundColor = ConsoleColor.Gray;
+Console.WriteLine("Beta-команды");
+Project.HelpCommand("nRepeat", "(value)", "", "Новый мощный цикл, который может принимать бесконечность команд (недоработан ввод команд)");
+Project.HelpCommand2("/package", "Запускает Packager (НЕ СДЕЛАНО! НЕ ИСПОЛЬЗУЙТЕ ЭТО)");
 Console.ForegroundColor = ConsoleColor.White;
 Console.WriteLine("*ConsoleEngineLanguage");
 Console.ReadLine();*/

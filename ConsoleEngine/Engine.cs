@@ -12,8 +12,8 @@ namespace ConsoleEngine
     [Serializable]
     public class Engine
     {
-        public static string version = "1.2.0-beta3";
-        public static string versionCEL = "3.0-beta2"; //Версия ConsoleEngineLanguage
+        public static string version = "1.2.0-beta4";
+        public static string versionCEL = "3.0-beta3"; //Версия ConsoleEngineLanguage
         public static string packagerVersion = "0.2 [Beta]";
         public static string framework = ".NET 9.0";
 
@@ -40,7 +40,7 @@ namespace ConsoleEngine
                 projects = JsonSerializer.Deserialize<List<string>>(jsonString);
             }
             catch
-            { Console.WriteLine("- Файл проекта не найден"); }
+            { Console.WriteLine("- Engine directory not found"); }
             Console.WriteLine("- Success!");
             Text.Enter();
             ProjectSelect();
@@ -75,6 +75,8 @@ namespace ConsoleEngine
             if (projects.Contains(selectedProject))
             {
                 project = Project.LoadSelectProject();
+                project.name = project.scene.ProjectSaveName;
+                project.scene.ProjectSaveName = null;
                 Compiler.Start(project);
             }
             else
@@ -86,6 +88,8 @@ namespace ConsoleEngine
                         break;
                     case ("load" or "l"):
                         project = Project.Load();
+                        project.name = project.scene.ProjectSaveName;
+                        project.scene.ProjectSaveName = null;
                         Compiler.Start(project);
                         break;
                     default:
