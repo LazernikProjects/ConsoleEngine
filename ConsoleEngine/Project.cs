@@ -14,7 +14,9 @@ namespace ConsoleEngine
         public Scene scene { get; set; } = new Scene();
         public List<Code> code { get; set; } = new List<Code>();
 
-        public string name; 
+        public string name; //{ get; set; }
+        public List<string> variables = new List<string>();
+        public List<int> variablesID = new List<int>();
         public void Save()
         {
             try
@@ -23,37 +25,32 @@ namespace ConsoleEngine
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Сохранение проекта...");
                 if (Directory.Exists($"C:\\ConsoleEngine\\Projects\\{name}") == true)
-                {
-                    Console.WriteLine("- Папка проекта обнаружена");
-                }
+                { Console.WriteLine("- project folder found"); }
                 else
                 {
-                    Console.WriteLine("- Папка проекта не найдена");
-                    Console.WriteLine("- Создание папки...");
+                    Console.WriteLine("- project folder not found");
+                    Console.WriteLine("- create project folder...");
                     Directory.CreateDirectory($"C:\\ConsoleEngine\\Projects\\{name}");
                 }
-                Console.WriteLine("- write file data.txt...");
                 if (Engine.projects.Contains(name))
-                { Console.WriteLine("- data.txt уже содержит этот проект"); }
+                { Console.WriteLine("- data.txt already contains this project"); }
                 else
                 {
+                    Console.WriteLine("- write file data.txt...");
                     Engine.projects.Add(name);
                     string dataSave = JsonSerializer.Serialize(Engine.projects);
                     File.WriteAllText("C:\\ConsoleEngine\\data.txt", dataSave);
                 }
                 Console.WriteLine("- write file project.ceproj...");
                 string projectSave = JsonSerializer.Serialize(this);
-                File.WriteAllText($"C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj", projectSave); 
+                File.WriteAllText($"C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj", projectSave);
                 Text.Success("Проект сохранен!");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine($"Путь к файлу проекта - C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.ReadLine();
+                Console.WriteLine($"- Path: C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj");
+                Text.Enter();
             }
-            catch(Exception ex)
-            {
-                Text.CriticalError($"{ex}");
-            }
+            catch (Exception ex)
+            { Text.CriticalError($"{ex}"); }
         }
         public static Project Load()
         {
@@ -64,12 +61,12 @@ namespace ConsoleEngine
                 string path = Console.ReadLine();
                 jsonString = File.ReadAllText(path);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             { Text.CriticalError($"{ex}"); }
             Console.WriteLine("read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
             Text.Success("Проект загружен!");
-            Console.ReadLine();
+            Text.Enter();
             return project;
         }
         public static Project LoadSelectProject()
@@ -85,7 +82,7 @@ namespace ConsoleEngine
             Console.WriteLine("read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
             Text.Success("Проект загружен!");
-            Console.ReadLine();
+            Text.Enter();
             return project;
         }
         public static void Help()
@@ -106,7 +103,6 @@ namespace ConsoleEngine
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Help - все команды (При написании кода напишите ТОЛЬКО НАЗВАНИЕ КОМАНДЫ, без аргументов, а аргументы напишите в соответствующем окне)");
-            Console.WriteLine();
             Console.WriteLine("#Code");
             HelpCommand("repeat", "(value)", "", "Цикл, повторяет две команды указанное кол-во раз");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -181,7 +177,7 @@ namespace ConsoleEngine
             Console.Write($" - {description}");
             Console.WriteLine();
         }
-        public static void HelpCommand3(string name, string description) 
+        public static void HelpCommand3(string name, string description)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(name);

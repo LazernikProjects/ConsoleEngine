@@ -12,10 +12,14 @@ namespace ConsoleEngine
         public static bool compilerStarted = false;
         public static int codeI = 0;
         public static string text = null;
+        public static int codeValue1 = 0;
         public static void Start(Project project)
         {
             compilerStarted = true;
+            Engine.project.variables.Clear();
+            Engine.project.variablesID.Clear();
             Fill.fill.Clear();
+            Variables.var.Clear();
             bool render = true;
             bool wait = false;
             project.scene.objX = 0;
@@ -24,6 +28,19 @@ namespace ConsoleEngine
             for (codeI = 0; codeI < project.code.Count; codeI++)
             {
                 render = true;
+                codeValue1 = 0;
+                if (project.code[codeI].IntArg1 > 999)
+                {
+                    for (int i = 0; Variables.var.Count > i; i++)
+                    {
+                        if (project.code[codeI].IntArg1 == Variables.var[i].ID)
+                        {
+                            codeValue1 = project.code[codeI].IntArg1;
+                            project.code[codeI].IntArg1 = Variables.var[i].Value;
+                            i = 9999;
+                        }
+                    }
+                }
                 switch (project.code[codeI].Name)
                 {
                     case ("repeat"):
@@ -144,6 +161,12 @@ namespace ConsoleEngine
                     case ("text"):
                         text = project.code[codeI].StrArg1;
                         break;
+                    case ("var"):
+                        render = false;
+                        Engine.project.variables.Add(project.code[codeI].StrArg1);
+                        Engine.project.variablesID.Add(1000 + project.variables.Count);
+                        Variables.var.Add(new(project.code[codeI].StrArg1, project.code[codeI].StrArg2, project.code[codeI].IntArg1, 1000 + project.variables.Count));
+                        break;
                     case ("nRepeat"):
                         repeatI = codeI;
                         int firstCommand = codeI + 1;
@@ -224,9 +247,12 @@ namespace ConsoleEngine
                         codeI += project.code[repeatI].IntArg2;
                         break;
                     default:
-                        Text.Error($"Неизвестная команда в строке {codeI}");
-                        Text.Enter();
+                        Text.Error($"Неизвестная команда в строке {codeI + 1}"); Text.Enter();
                         break;
+                }
+                if (codeValue1 > 999)
+                {
+                    project.code[codeI].IntArg1 = codeValue1;
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
                 if (wait == true)

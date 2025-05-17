@@ -12,7 +12,7 @@ namespace ConsoleEngine
     [Serializable]
     public class Engine
     {
-        public static string version = "1.2.0";
+        public static string version = "2.0-beta1";
         public static string versionCEL = "3.0"; //Версия ConsoleEngineLanguage
         public static string packagerVersion = "0.2 [Beta]";
         public static string framework = "self-contained";
@@ -21,7 +21,7 @@ namespace ConsoleEngine
         public static List<string> projects = new();
         public static Project project { get; set; } = null;
         public static void Loading()
-        { 
+        {
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write("- ConsoleEngine");
             Console.ForegroundColor = ConsoleColor.Red;
@@ -49,20 +49,18 @@ namespace ConsoleEngine
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Выберите проект - всего ({projects.Count})");
+            Console.WriteLine($"- Выберите проект - всего ({projects.Count})");
             for (int i = 0; i < projects.Count; i++)
             {
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("----------------------------------------------");
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"Имя проекта: {projects[i]}");
-
+                Console.WriteLine($"Название: {projects[i]}");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 DirectoryInfo di = new DirectoryInfo($"C:\\ConsoleEngine\\Projects\\{projects[i]}");
                 FileInfo[] fiArr = di.GetFiles();
                 foreach (FileInfo f in fiArr)
-                    Console.WriteLine($"Размер файла: {f.Length} байт");
-
+                    Console.WriteLine($"Размер: {f.Length} байт");
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine($"Путь: C:\\ConsoleEngine\\Projects\\{projects[i]}");
                 Console.ForegroundColor = ConsoleColor.White;
@@ -102,27 +100,33 @@ namespace ConsoleEngine
         }
         public static void ProjectCreate()
         {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("- Создание проекта");
-            Console.WriteLine();
-            Console.WriteLine("Введите название проекта");
             project = new Project();
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("- Создание проекта");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Название: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
             project.name = Console.ReadLine();
-            Console.WriteLine("Введите [X] сцены");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Размер сцены {X}: ");
+            Console.ForegroundColor = ConsoleColor.Green;
             try { project.scene.X = int.Parse(Console.ReadLine()); }
-            catch (FormatException ex) 
-            {
-                Text.Error($"Введено неверное значение - [Подробнее: {ex.Message}]");
-                project.scene.X = 5;
-            }
-            Console.WriteLine("Введите [Y] сцены");
+            catch (FormatException)
+            { Text.Error("Введите число! (Установлено дефолтное значение {5})"); project.scene.X = 5; }
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Размер сцены {Y}: ");
+            Console.ForegroundColor = ConsoleColor.Green;
             try { project.scene.Y = int.Parse(Console.ReadLine()); }
-            catch (FormatException ex)
+            catch (FormatException)
+            { Text.Error("Введите число! (Установлено дефолтное значение {5})"); project.scene.Y = 5; }
+            /*Console.WriteLine("Показать дополнительные настройки? (yes/no)");
+            string answer = Console.ReadLine().ToLower();
+            if (answer == "yes" || answer == "y" || answer == "да")
             {
-                Text.Error($"Введено неверное значение - [Подробнее: {ex.Message}]");
-                project.scene.Y = 5;
-            }
+                Console.WriteLine("- Дополнительные настройки:");
+                Console.Write($"renderType={project.scene.renderType}");
+            }*/
             Text.Success("Проект создан!");
             Text.Enter();
             project.scene.Render();

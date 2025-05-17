@@ -38,7 +38,9 @@ namespace ConsoleEngine
         public static void Enter()
         {
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("- Press 'Enter'");
+            Console.Write("- Press ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("'Enter'");
             Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.White;
         }

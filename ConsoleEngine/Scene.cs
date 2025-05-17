@@ -10,15 +10,15 @@ namespace ConsoleEngine
     [Serializable]
     public class Scene
     {
-        public  int X { get; set; } = 0;
-        public  int Y { get; set; } = 0;
+        public int X { get; set; } = 0;
+        public int Y { get; set; } = 0;
         public string objTexture { get; set; } = "{}";
+        public string fillTexture { get; set; } = "()";
+        public string fieldTexture { get; set; } = "[]";
         public string objColorFG { get; set; } = "black";
         public string objColorBG { get; set; } = "yellow";
-        public string fieldTexture { get; set; } = "[]";
         public string fieldColorFG { get; set; } = "darkgray";
         public string fieldColorBG { get; set; } = "black";
-        public string fillTexture { get; set; } = "()";
         public string renderType { get; set; } = "default";
         public string ProjectSaveName { get; set; }
 
