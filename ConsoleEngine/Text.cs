@@ -10,11 +10,16 @@ namespace ConsoleEngine
     {
         public static void Success(string successText)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             if (successText == "" || successText == null)
             { Console.WriteLine($"- Успешно!"); }
             else
-            { Console.WriteLine($"- Успех: {successText}"); }
+            { 
+                Console.Write($"- Успех: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{successText}");
+                Console.WriteLine();
+            }
             Console.ForegroundColor = ConsoleColor.White;
         }
         public static void Warning(string warnText)
@@ -39,10 +44,10 @@ namespace ConsoleEngine
         {
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("- Press ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("'Enter'");
-            Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.White;
+            Console.ReadLine();
         }
     }
 }

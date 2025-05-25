@@ -1,21 +1,27 @@
 ﻿using ConsoleEngine;
+using ConsoleEngine.Operators;
 using System.Reflection.PortableExecutable;
 Console.Title = "ConsoleEngine";
 Engine.Loading();
-/*Console.WriteLine("CEL 3.0* - Новые команды!");
-Project.HelpCommand("text","","[text]", "Выводит текст");
-Project.HelpCommand("fillWithPosD", "(x, y)", "", "Создает 'default' объект (fill) в указанных координатах с предустановленным цветом");
-Project.HelpCommand2("/p.texture", "Изменяет текстуру у указанного объекта");
-Project.HelpCommand3("-beta", "Позволяет использовать beta-команды");
-Console.WriteLine();
-Console.ForegroundColor = ConsoleColor.Gray;
-Console.WriteLine("Beta-команды");
-Project.HelpCommand("nRepeat", "(value)", "", "Новый мощный цикл, который может принимать бесконечность команд");
-Project.HelpCommand2("/package", "Запускает Packager (НЕ СДЕЛАНО! НЕ ИСПОЛЬЗУЙТЕ ЭТО)");
-Console.ForegroundColor = ConsoleColor.White;
-Console.WriteLine("*ConsoleEngineLanguage");
+/*var scene = new Scene();
+var project = new Project();
+scene.X = 60;
+scene.Y = 12;
+project.Code = new List<Operator>()
+{
+    new Pos()
+    {
+        X=4,
+        Y=5
+    },
+    new Move()
+    {
+        X=1,
+        Y=0
+    }
+};
+project.Run(scene);
+scene.Render();
+project.Display();
+Console.WriteLine("Press any key");
 Console.ReadLine();*/
-//Packager.Package();
-//Engine.ProjectSelect();
-//Engine.project.Save();
-//Project.Help();

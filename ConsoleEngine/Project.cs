@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleEngine.Operators;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,36 @@ namespace ConsoleEngine
     {
         public Scene scene { get; set; } = new Scene();
         public List<Code> code { get; set; } = new List<Code>();
+        public List<Operator> Operators { get; internal set; } = new List<Operator>();
 
-        public string name; //{ get; set; }
-        public List<string> variables = new List<string>();
-        public List<int> variablesID = new List<int>();
+        public string ?name; //{ get; set; }
+        public static string compilerType = "old";
+        public void Run(Scene scene)
+        {
+            Variables.var.Clear();
+            foreach (Operator op in Operators)
+            {
+                op.Run(scene);
+            }
+            Display();
+            while (true)
+            {
+                string name = Editor.StrRead("Name");
+                if (name == "/start")
+                {
+                    break;
+                }
+                else { Editor.CommandWrite(Engine.project.Operators, name); }
+            }
+            Run(scene);
+        }
+        internal void Display()
+        {
+            foreach (Operator op in Operators)
+            {
+                op.Display(0);
+            }
+        }
         public void Save()
         {
             try
@@ -57,13 +84,16 @@ namespace ConsoleEngine
             string jsonString = null;
             try
             {
-                Console.WriteLine("Укажите путь к файлу (project.ceproj)");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.Write("Путь к файлу проекта: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 string path = Console.ReadLine();
                 jsonString = File.ReadAllText(path);
             }
             catch (Exception ex)
             { Text.CriticalError($"{ex}"); }
-            Console.WriteLine("read file project.ceproj...");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("- read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
             Text.Success("Проект загружен!");
             Text.Enter();
@@ -79,7 +109,8 @@ namespace ConsoleEngine
             }
             catch (Exception ex)
             { Text.CriticalError($"{ex}"); }
-            Console.WriteLine("read file project.ceproj...");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("- read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
             Text.Success("Проект загружен!");
             Text.Enter();

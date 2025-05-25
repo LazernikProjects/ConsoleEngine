@@ -24,8 +24,8 @@ namespace ConsoleEngine
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write("- ConsoleEngine");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(" [Refactored] ");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write(" [Refactored V2] ");
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write($"- Version: {version}");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -48,8 +48,8 @@ namespace ConsoleEngine
         public static void ProjectSelect()
         {
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"- Выберите проект - всего ({projects.Count})");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"- Проекты [ConsoleEngine {version}]");
             for (int i = 0; i < projects.Count; i++)
             {
                 Console.ForegroundColor = ConsoleColor.White;
@@ -64,11 +64,13 @@ namespace ConsoleEngine
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine($"Путь: C:\\ConsoleEngine\\Projects\\{projects[i]}");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("----------------------------------------------");
-                Console.WriteLine();
+                //Console.WriteLine("----------------------------------------------");
+                //Console.WriteLine();
             }
+            Console.WriteLine("----------------------------------------------");
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("Чтобы создать проект введите 'create', загрузить - 'load'");
-
+            Console.ForegroundColor = ConsoleColor.Yellow;
             selectedProject = Console.ReadLine();
             if (projects.Contains(selectedProject))
             {
@@ -120,17 +122,25 @@ namespace ConsoleEngine
             try { project.scene.Y = int.Parse(Console.ReadLine()); }
             catch (FormatException)
             { Text.Error("Введите число! (Установлено дефолтное значение {5})"); project.scene.Y = 5; }
-            /*Console.WriteLine("Показать дополнительные настройки? (yes/no)");
-            string answer = Console.ReadLine().ToLower();
-            if (answer == "yes" || answer == "y" || answer == "да")
-            {
-                Console.WriteLine("- Дополнительные настройки:");
-                Console.Write($"renderType={project.scene.renderType}");
-            }*/
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Тип проекта (old/new): ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            string answer = Console.ReadLine();
+            if (answer == "old") { Project.compilerType = "old"; }
+            else if (answer == "new") { Project.compilerType = "new"; }
+            else { Project.compilerType = "old"; }
             Text.Success("Проект создан!");
             Text.Enter();
-            project.scene.Render();
-            Compiler.Start(project);
+            if (Project.compilerType == "old")
+            {
+                project.scene.Render();
+                Compiler.Start(project);
+            }
+            else if (Project.compilerType == "new")
+            {
+                project.scene.Render();
+                project.Run(project.scene);
+            }
         }
     }
 }
