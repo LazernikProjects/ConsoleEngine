@@ -28,6 +28,7 @@ namespace ConsoleEngine
         public void Render()
         {
             Console.Clear();
+            if (Editor.showScene == false) { return; }
             if (Compiler.text != "" & Compiler.text != null)
             {
                 Console.BackgroundColor = ConsoleColor.Black;
@@ -55,6 +56,7 @@ namespace ConsoleEngine
                                 Color(Fill.fill[fillI].ColorFG, Fill.fill[fillI].ColorBG);
                                 Console.Write(fillTexture);
                                 drawField = false;
+                                fillI = 999999;
                             }
                         }
                     }

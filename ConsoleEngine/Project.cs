@@ -14,10 +14,11 @@ namespace ConsoleEngine
     {
         public Scene scene { get; set; } = new Scene();
         public List<Code> code { get; set; } = new List<Code>();
-        public List<Operator> Operators { get; internal set; } = new List<Operator>();
+        public List<Operator> Operators { get; set; } = new List<Operator>();
 
-        public string ?name; //{ get; set; }
-        public static string compilerType = "old";
+        public string? name { get; set; }
+        public int saveVersion { get; set; } = 0;
+        public string compilerType { get; set; } = "default";
         public void Run(Scene scene)
         {
             Variables.var.Clear();
@@ -32,6 +33,10 @@ namespace ConsoleEngine
                 if (name == "/start")
                 {
                     break;
+                }
+                if (name == "/save")
+                {
+                    Engine.project.Save();
                 }
                 else { Editor.CommandWrite(Engine.project.Operators, name); }
             }
@@ -48,16 +53,16 @@ namespace ConsoleEngine
         {
             try
             {
-                scene.ProjectSaveName = name;
+                saveVersion = Engine.versionNumber;
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Сохранение проекта...");
-                if (Directory.Exists($"C:\\ConsoleEngine\\Projects\\{name}") == true)
+                if (Directory.Exists($"{Engine.EnginePath}\\Projects\\{name}") == true)
                 { Console.WriteLine("- project folder found"); }
                 else
                 {
                     Console.WriteLine("- project folder not found");
                     Console.WriteLine("- create project folder...");
-                    Directory.CreateDirectory($"C:\\ConsoleEngine\\Projects\\{name}");
+                    Directory.CreateDirectory($"{Engine.EnginePath}\\Projects\\{name}");
                 }
                 if (Engine.projects.Contains(name))
                 { Console.WriteLine("- data.txt already contains this project"); }
@@ -66,14 +71,14 @@ namespace ConsoleEngine
                     Console.WriteLine("- write file data.txt...");
                     Engine.projects.Add(name);
                     string dataSave = JsonSerializer.Serialize(Engine.projects);
-                    File.WriteAllText("C:\\ConsoleEngine\\data.txt", dataSave);
+                    File.WriteAllText($"{Engine.EnginePath}\\data.txt", dataSave);
                 }
                 Console.WriteLine("- write file project.ceproj...");
                 string projectSave = JsonSerializer.Serialize(this);
-                File.WriteAllText($"C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj", projectSave);
+                File.WriteAllText($"{Engine.EnginePath}\\Projects\\{name}\\project.ceproj", projectSave);
                 Text.Success("Проект сохранен!");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine($"- Path: C:\\ConsoleEngine\\Projects\\{name}\\project.ceproj");
+                Console.WriteLine($"- Path: {Engine.EnginePath}\\Projects\\{name}\\project.ceproj");
                 Text.Enter();
             }
             catch (Exception ex)
@@ -95,6 +100,7 @@ namespace ConsoleEngine
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("- read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
+            Engine.CheckVersion(project.saveVersion);
             Text.Success("Проект загружен!");
             Text.Enter();
             return project;
@@ -104,7 +110,7 @@ namespace ConsoleEngine
             string jsonString = null;
             try
             {
-                string path = $"C:\\ConsoleEngine\\Projects\\{Engine.selectedProject}\\project.ceproj";
+                string path = $"{Engine.EnginePath}\\Projects\\{Engine.selectedProject}\\project.ceproj";
                 jsonString = File.ReadAllText(path);
             }
             catch (Exception ex)
@@ -112,6 +118,7 @@ namespace ConsoleEngine
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("- read file project.ceproj...");
             var project = JsonSerializer.Deserialize<Project>(jsonString);
+            Engine.CheckVersion(project.saveVersion);
             Text.Success("Проект загружен!");
             Text.Enter();
             return project;
@@ -125,6 +132,7 @@ namespace ConsoleEngine
             HelpCommand2("/help1", "Все возможности CEL (Код)");
             HelpCommand2("/help2", "Все команды");
             HelpCommand2("/help3", "Функции движка");
+            HelpCommand2("/help4", "Переменные (не закончено!!!)");
             Text.Enter();
             //Engine.project.scene.Render();
             //Compiler.Start(Engine.project);
@@ -175,6 +183,7 @@ namespace ConsoleEngine
             HelpCommand2("/color", "Изменяет цвет у указанного объекта (obj, fill, field)");
             HelpCommand2("/name", "Изменяет имя проекта");
             HelpCommand2("/engine", "Выводит информацию о движке");
+            HelpCommand2("/version", "Проверяет версию проекта");
             Text.Enter();
         }
         public static void HelpEngineFunctions()
@@ -186,6 +195,21 @@ namespace ConsoleEngine
             HelpCommand3("-delete", "Позволяет удалять код");
             HelpCommand3("-custom", "Позволяет создавать кастомные команды");
             HelpCommand3("-beta", "Позволяет использовать beta-команды");
+            HelpCommand3("-settings", "Быстрые настройки");
+            Text.Enter();
+        }
+        public static void HelpVariables()
+        {
+            Console.Clear();
+            Text.Warning("Документация по переменным не закончена!");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("#Variables");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("- Создать переменную (для создания напишите 'var')");
+            HelpCommand4("var", "имя", "значение");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("- Изменение переменной (просто напишите имя переменной)");
+            Console.WriteLine("- Также вы можете подсунуть значение переменно для команды требующей числовое значение, написав сначала 'var', вместо значения, а затем имя переменной [Пример: moveX(имя переменной)]");
             Text.Enter();
         }
         public static void HelpCommand(string name, string arg, string arg2, string description) //HelpCommand("", "", "", ""); 
@@ -214,6 +238,18 @@ namespace ConsoleEngine
             Console.Write(name);
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.Write($" - {description}");
+            Console.WriteLine();
+        }
+        public static void HelpCommand4(string name, string arg, string arg2) //HelpCommand("", "", "", ""); 
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(name);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write($" {arg}");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($" = ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{arg2}");
             Console.WriteLine();
         }
     }

@@ -25,19 +25,19 @@ namespace ConsoleEngine
         public static void Warning(string warnText)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"{{!}} Предупреждение: {warnText}");
+            Console.WriteLine($"- Предупреждение: {warnText}");
             Console.ForegroundColor = ConsoleColor.White;
         }
         public static void Error(string errorText)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{{!}} Ошибка: {errorText}");
+            Console.WriteLine($"- Ошибка: {errorText}");
             Console.ForegroundColor = ConsoleColor.White;
         }
         public static void CriticalError(string criticalErrorText)
         {
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine($"{{!}} Критическая ошибка: {criticalErrorText}");
+            Console.WriteLine($"- Критическая ошибка: {criticalErrorText}");
             Console.ForegroundColor = ConsoleColor.White;
         }
         public static void Enter()

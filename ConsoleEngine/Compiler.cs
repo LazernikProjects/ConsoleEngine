@@ -206,6 +206,26 @@ namespace ConsoleEngine
                             }
                         }
                         break;
+                    case "setVariable":
+                        render = false;
+                        for (int i = 0; Variables.var.Count > i; i++)
+                        {
+                            if (project.code[codeI].StrArg1 == Variables.var[i].Name)
+                            {
+                                if (project.code[codeI].StrArg2 == "+")
+                                { Variables.var[i].Value += project.code[codeI].IntArg1; }
+                                if (project.code[codeI].StrArg2 == "-")
+                                { Variables.var[i].Value -= project.code[codeI].IntArg1; }
+                                if (project.code[codeI].StrArg2 == "*")
+                                { Variables.var[i].Value *= project.code[codeI].IntArg1; }
+                                if (project.code[codeI].StrArg2 == "/")
+                                { Variables.var[i].Value /= project.code[codeI].IntArg1; }
+                                if (project.code[codeI].StrArg2 == "=")
+                                { Variables.var[i].Value = project.code[codeI].IntArg1; }
+                                i = 9999;
+                            }
+                        }
+                        break;
                     case ("nRepeat"):
                         repeatI = codeI;
                         int firstCommand = codeI + 1;
@@ -214,6 +234,32 @@ namespace ConsoleEngine
                             render = true;
                             for (int nRepeatC = 0; nRepeatC < project.code[repeatI].IntArg2; nRepeatC++)
                             {
+                                int codeValueR1 = 0;
+                                int codeValueR2 = 0;
+                                if (project.code[firstCommand + nRepeatC].IntArg1 > 15999 & project.code[firstCommand + nRepeatC].IntArg1 < 17000)
+                                {
+                                    for (int i = 0; Variables.var.Count > i; i++)
+                                    {
+                                        if (project.code[firstCommand + nRepeatC].IntArg1 == Variables.var[i].ID)
+                                        {
+                                            codeValueR1 = project.code[firstCommand + nRepeatC].IntArg1;
+                                            project.code[firstCommand + nRepeatC].IntArg1 = Variables.var[i].Value;
+                                            i = 9999;
+                                        }
+                                    }
+                                }
+                                if (project.code[firstCommand + nRepeatC].IntArg2 > 15999 & project.code[firstCommand + nRepeatC].IntArg2 < 17000)
+                                {
+                                    for (int i = 0; Variables.var.Count > i; i++)
+                                    {
+                                        if (project.code[firstCommand + nRepeatC].IntArg2 == Variables.var[i].ID)
+                                        {
+                                            codeValueR2 = project.code[firstCommand + nRepeatC].IntArg2;
+                                            project.code[firstCommand + nRepeatC].IntArg2 = Variables.var[i].Value;
+                                            i = 9999;
+                                        }
+                                    }
+                                }
                                 switch (project.code[firstCommand + nRepeatC].Name)
                                 {
                                     case ("pos"):
@@ -279,11 +325,9 @@ namespace ConsoleEngine
                                         text = project.code[firstCommand + nRepeatC].StrArg1;
                                         break;
                                     case ("var"):
-                                        render = false;
                                         Variables.var.Add(new(project.code[firstCommand + nRepeatC].StrArg1, project.code[firstCommand + nRepeatC].StrArg2, project.code[firstCommand + nRepeatC].IntArg1, 16000 + Variables.var.Count));
                                         break;
                                     case ("varSet"):
-                                        render = false;
                                         for (int i = 0; Variables.var.Count > i; i++)
                                         {
                                             if (project.code[firstCommand + nRepeatC].StrArg1 == Variables.var[i].Name)
@@ -294,10 +338,9 @@ namespace ConsoleEngine
                                         }
                                         break;
                                     case ("varChange"):
-                                        render = false;
                                         for (int i = 0; Variables.var.Count > i; i++)
                                         {
-                                            if (project.code[codeI].StrArg1 == Variables.var[i].Name)
+                                            if (project.code[firstCommand + nRepeatC].StrArg1 == Variables.var[i].Name)
                                             {
                                                 if (project.code[firstCommand + nRepeatC].StrArg2 == "+")
                                                 { Variables.var[i].Value += project.code[firstCommand + nRepeatC].IntArg1; }
@@ -311,10 +354,33 @@ namespace ConsoleEngine
                                             }
                                         }
                                         break;
+                                    case "setVariable":
+                                        for (int i = 0; Variables.var.Count > i; i++)
+                                        {
+                                            if (project.code[firstCommand + nRepeatC].StrArg1 == Variables.var[i].Name)
+                                            {
+                                                if (project.code[firstCommand + nRepeatC].StrArg2 == "+")
+                                                { Variables.var[i].Value += project.code[firstCommand + nRepeatC].IntArg1; }
+                                                if (project.code[firstCommand + nRepeatC].StrArg2 == "-")
+                                                { Variables.var[i].Value -= project.code[firstCommand + nRepeatC].IntArg1; }
+                                                if (project.code[firstCommand + nRepeatC].StrArg2 == "*")
+                                                { Variables.var[i].Value *= project.code[firstCommand + nRepeatC].IntArg1; }
+                                                if (project.code[firstCommand + nRepeatC].StrArg2 == "/")
+                                                { Variables.var[i].Value /= project.code[firstCommand + nRepeatC].IntArg1; }
+                                                if (project.code[firstCommand + nRepeatC].StrArg2 == "=")
+                                                { Variables.var[i].Value = project.code[firstCommand + nRepeatC].IntArg1; }
+                                                i = 9999;
+                                            }
+                                        }
+                                        break;
                                     default:
                                         Text.Error($"Неизвестная команда в цикле nRepeat"); Text.Enter();
                                         break;
                                 }
+                                if (codeValueR1 > 15999 & codeValueR1 < 17000)
+                                { project.code[firstCommand + nRepeatC].IntArg1 = codeValueR1; }
+                                if (codeValueR2 > 15999 & codeValueR2 < 17000)
+                                { project.code[firstCommand + nRepeatC].IntArg2 = codeValueR2; }
                             }
                             if (project.scene.renderType == "default")
                             { project.scene.Render(); }
@@ -329,13 +395,10 @@ namespace ConsoleEngine
                         break;
                 }
                 if (codeValue1 > 15999 & codeValue1 < 17000)
-                {
-                    project.code[codeI].IntArg1 = codeValue1;
-                }
+                { project.code[codeI].IntArg1 = codeValue1; }
                 if (codeValue2 > 15999 & codeValue2 < 17000)
-                {
-                    project.code[codeI].IntArg2 = codeValue2;
-                }
+                { project.code[codeI].IntArg2 = codeValue2; }
+
                 Console.BackgroundColor = ConsoleColor.Black;
                 if (wait == true)
                 { Text.Enter(); wait = false; }
@@ -368,7 +431,7 @@ namespace ConsoleEngine
                 Console.WriteLine();
             }
             compilerStarted = false;
-            if (Project.compilerType == "old")
+            if (project.compilerType == "default" || project.compilerType == "old")
             {
                 Editor.CodeView();
                 Editor.CodeWrite();

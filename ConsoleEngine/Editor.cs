@@ -23,6 +23,7 @@ namespace ConsoleEngine
             int repeatIndex = 0;
             string repeatAnswer = null;
 
+            Console.ForegroundColor = ConsoleColor.White;
             string writtenCode = Console.ReadLine();
             switch (writtenCode.ToLower())
             {
@@ -204,7 +205,7 @@ namespace ConsoleEngine
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("\\Command = ");
                         repeatAnswer = Console.ReadLine();
-                        if (repeatAnswer == "exit")
+                        if (repeatAnswer == "exit" || repeatAnswer == "e")
                         { e = true; repeatCommandsCount--; }
                         else
                         {
@@ -315,6 +316,20 @@ namespace ConsoleEngine
                                     intArg1 = IntRead("Value");
                                     Engine.project.code.Add(new("varChange", "engine", intArg1, 0, strArg1, strArg2));
                                     break;
+                                default:
+                                    for (int i = 0; Variables.var.Count > i; i++)
+                                    {
+                                        if (Variables.var[i].Name.ToLower() == repeatAnswer)
+                                        {
+                                            strArg2 = StrRead("Operation");
+                                            intArg1 = IntRead("Value");
+                                            Engine.project.code.Add(new("setVariable", "engine", intArg1, 0, repeatAnswer, strArg2));
+                                            repeatCommandsCount++;
+                                            break;
+                                        }
+                                    }
+                                    repeatCommandsCount--;
+                                    break;
                             }
                             Engine.project.code[Engine.project.code.Count - 1].Type = "engine-repeat";
                         }
@@ -329,6 +344,7 @@ namespace ConsoleEngine
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine("- Данные проекта:");
                     Console.WriteLine($"Название проекта: {Engine.project.name}");
+                    Console.WriteLine($"Версия проекта: {Engine.project.saveVersion}");
                     Console.WriteLine($"Размер сцены: X-{Engine.project.scene.X}, Y-{Engine.project.scene.Y}");
                     Console.WriteLine($"Положение obj: X-{Engine.project.scene.objX}, Y-{Engine.project.scene.objY}");
                     Console.WriteLine($"Кол-во строчек кода: {Engine.project.code.Count}");
@@ -409,11 +425,17 @@ namespace ConsoleEngine
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine("- ConsoleEngine:");
                     Console.WriteLine($"by LazernikProjects");
-                    Console.WriteLine($"Engine version: {Engine.version}");
+                    Console.WriteLine($"Engine version: {Engine.version} ({Engine.versionNumber})");
                     Console.WriteLine($"CEL version: {Engine.versionCEL}");
                     Console.WriteLine($"Framework: {Engine.framework}");
-                    Console.WriteLine($"Engine folder: C:\\ConsoleEngine");
+                    Console.WriteLine($"Engine folder: {Engine.EnginePath}");
                     Console.WriteLine($"GitHub: https://github.com/LazernikProjects/ConsoleEngine");
+                    Text.Enter();
+                    break;
+                case "/version" or "/p.version":
+                    Console.WriteLine($"- project version: {Engine.project.saveVersion}");
+                    Console.WriteLine($"- engine version: {Engine.version} ({Engine.versionNumber})");
+                    Engine.CheckVersion(Engine.project.saveVersion);
                     Text.Enter();
                     break;
                 case ("-custom" or "custom" or "-c"):
@@ -445,15 +467,37 @@ namespace ConsoleEngine
                     else
                     { Text.Error("Неверная команда"); Text.Enter(); }
                     break;
-                case ("-editor"):
-                    repeatAnswer = Console.ReadLine();
-                    if (repeatAnswer == "codeHide")
-                    { showCode = false; }
-                    else if (repeatAnswer == "codeShow")
-                    { showCode = true; }
+                case ("-settings"):
+                    Console.WriteLine("Быстрые настройки (отменить - 'exit')");
+                    Console.WriteLine($"1.Показывать код: {showCode}");
+                    Console.WriteLine($"2.Показывать сцену: {showScene}");
+                    repeatAnswer = StrRead("");
+                    if (repeatAnswer == "1")
+                    {
+                        if (showCode == true) { showCode = false; }
+                        else { showCode = true; }
+                    }
+                    else if (repeatAnswer == "2")
+                    {
+                        if (showScene == true) { showScene = false; }
+                        else { showScene = true; }
+                    }
+                    else if (repeatAnswer == "exit" || repeatAnswer == "e")
+                    { break; }
+                    else
+                    { Text.Error("Неверное значение"); Text.Enter(); }
                     break;
                 default:
-                    CodeWrite();
+                    for (int i = 0; Variables.var.Count > i; i++)
+                    {
+                        if (Variables.var[i].Name.ToLower() == writtenCode)
+                        {
+                            strArg2 = StrRead("Operation");
+                            intArg1 = IntRead("Value");
+                            Engine.project.code.Add(new("setVariable", "engine", intArg1, 0, writtenCode, strArg2));
+                            break;
+                        }
+                    }
                     break;
             }
             Engine.project.scene.Render();
@@ -571,6 +615,9 @@ namespace ConsoleEngine
                     case ("sceneSize"):
                         CodeV("sceneSize", $"({intArg1}, {intArg2})", "", codeI);
                         break;
+                    case "move":
+                        CodeV("move", $"({intArg1}, {intArg2})", "", codeI);
+                        break;
                     case ("changeRender"):
                         CodeV("changeRender", "", $"[{strArg1}]", codeI);
                         break;
@@ -582,6 +629,16 @@ namespace ConsoleEngine
                         break;
                     case ("var"):
                         CodeV("var", $"{intArg1}", $"{strArg1}", codeI);
+                        break;
+                    case ("setVariable"):
+                        if (commandType == "engine-repeat")
+                        { Console.Write(" \\"); }
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write(strArg1);
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write($" {strArg2} ");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write($"{intArg1}");
                         break;
                     default:
                         CodeV($"{Engine.project.code[codeI].Name}", $"({intArg1}, {intArg2})", $"[{strArg1}, {strArg2}]", codeI);
@@ -596,7 +653,7 @@ namespace ConsoleEngine
             bool ifVar1 = false;
             string varName1 = "";
             string varName2 = "";
-            /*if (Engine.project.code[index].IntArg1 > 15999 & Engine.project.code[index].IntArg1 < 17000)
+            if (Engine.project.code[index].IntArg1 > 15999 & Engine.project.code[index].IntArg1 < 17000)
             {
                 ifVar1 = true;
                 for (int i = 0; Variables.var.Count > i; i++)
@@ -623,6 +680,8 @@ namespace ConsoleEngine
             if (ifVar1 == true)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
+                if (commandType == "engine-repeat")
+                { Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write(" \\"); }
                 Console.Write(name);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 if (varName1 != "" & varName2 == "" & Engine.project.code[index].IntArg2 == 0)
@@ -637,8 +696,8 @@ namespace ConsoleEngine
                 }
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.Write($"{arg2}");
-            }*/
-            if (commandType == "engine")
+            }
+            else if (commandType == "engine")
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write(name);
@@ -776,7 +835,7 @@ namespace ConsoleEngine
                     {
                         if (Variables.var[i].Name == outputPre)
                         {
-                            return new VariableRef { VariableObj = Variables.var[i]};
+                            return new VariableRef { VariableObj = Variables.var[i] };
                         }
                     }
                     Text.Error("Переменная с таким именем не найдена");
@@ -792,7 +851,7 @@ namespace ConsoleEngine
             {
                 Text.Error("Введено неверное значение (Требуется число)");
                 Text.Enter();
-                
+
             }
             return new OperatorValue { Value = 0 };
         }
