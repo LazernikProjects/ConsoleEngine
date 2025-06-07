@@ -281,23 +281,23 @@ namespace ConsoleEngine
                                         render = false;
                                         break;
                                     case ("texture"):
-                                        if (project.code[codeI].StrArg1 == "obj")
+                                        if (project.code[firstCommand + nRepeatC].StrArg1 == "obj")
                                         { project.scene.objTexture = project.code[firstCommand + nRepeatC].StrArg2; }
-                                        if (project.code[codeI].StrArg1 == "fill")
+                                        if (project.code[firstCommand + nRepeatC].StrArg1 == "fill")
                                         { project.scene.fillTexture = project.code[firstCommand + nRepeatC].StrArg2; }
-                                        if (project.code[codeI].StrArg1 == "field")
+                                        if (project.code[firstCommand + nRepeatC].StrArg1 == "field")
                                         { project.scene.fieldTexture = project.code[firstCommand + nRepeatC].StrArg2; }
                                         break;
                                     case ("colorFG"):
-                                        if (project.code[codeI].StrArg1 == "obj")
+                                        if (project.code[firstCommand + nRepeatC].StrArg1 == "obj")
                                         { project.scene.objColorFG = project.code[firstCommand + nRepeatC].StrArg2; }
-                                        if (project.code[codeI].StrArg1 == "field")
+                                        if (project.code[firstCommand + nRepeatC].StrArg1 == "field")
                                         { project.scene.fieldColorFG = project.code[firstCommand + nRepeatC].StrArg2; }
                                         break;
                                     case ("colorBG"):
-                                        if (project.code[codeI].StrArg1 == "obj")
+                                        if (project.code[firstCommand + nRepeatC].StrArg1 == "obj")
                                         { project.scene.objColorBG = project.code[firstCommand + nRepeatC].StrArg2; }
-                                        if (project.code[codeI].StrArg1 == "field")
+                                        if (project.code[firstCommand + nRepeatC].StrArg1 == "field")
                                         { project.scene.fieldColorBG = project.code[firstCommand + nRepeatC].StrArg2; }
                                         break;
                                     case ("wait"):
